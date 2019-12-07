@@ -60,7 +60,6 @@ OFFPRFX = $(shell ./prefix)
 OBJS = $(SRCS:.c=.o)
 
 all: $(program)
-	$(STRIP) -s $(program)
 
 %.o: %.c $(HEADERS) prefix
 	$(CC) $(CFLAGS) $(DEFINES) -DPRIoff="\"$(OFFPRFX)d\"" -DPROGRAM="\"$(program)\"" -DVERSION="\"$(version)\"" -c $<

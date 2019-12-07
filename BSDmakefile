@@ -58,7 +58,6 @@ DEFINES += -DDEBUG
 OBJS = $(SRCS:.c=.o)
 
 all: $(program)
-	$(STRIP) -s $(program)
 
 .SUFFIXES: .o .c
 .c.o:
