@@ -387,7 +387,6 @@ static void print_help()
 	  "                                additional -w adds more URLs\n"
 #else
 	  "-a <url>[,<url>]* : specify the full announce URLs\n"
-	  "                    at least one is required\n"
 	  "                    additional -a adds backup trackers\n"
           "-A <file>         : specify a file from which a full announce URL is read\n"
 	  "-c <comment>      : add a comment to the metainfo\n"
