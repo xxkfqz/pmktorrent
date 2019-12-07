@@ -23,6 +23,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <string.h>       /* strerror() */
 #include <stdio.h>        /* perror(), printf() etc. */
 #include <sys/stat.h>     /* the stat structure */
+#include <sys/mount.h>    /* the BLKGETSIZE64 constant and ioctl() */
+#include <fcntl.h>        /* the O_RDONLY flag */
 #include <unistd.h>       /* getopt(), getcwd(), sysconf() */
 #include <string.h>       /* strcmp(), strlen(), strncpy() */
 #include <strings.h>      /* strcasecmp() */
@@ -230,9 +232,9 @@ static int is_dir(metafile_t *m, char *target)
 		return 1;
 
 	/* if it isn't a regular file either, something is wrong.. */
-	if (!S_ISREG(s.st_mode)) {
+        if (!S_ISREG(s.st_mode) && !S_ISBLK(s.st_mode)) {
 		fprintf(stderr,
-			"'%s' is neither a directory nor regular file.\n",
+                        "'%s' is neither a directory nor regular file nor a block device.\n",
 				target);
 		exit(EXIT_FAILURE);
 	}
@@ -244,11 +246,22 @@ static int is_dir(metafile_t *m, char *target)
 		fprintf(stderr, "Out of memory.\n");
 		exit(EXIT_FAILURE);
 	}
-	m->file_list->path = target;
-	m->file_list->size = s.st_size;
+        m->file_list->path = target;
 	m->file_list->next = NULL;
 	/* ..and size variable */
-	m->size = s.st_size;
+        if (S_ISREG(s.st_mode)) {
+                m->size = s.st_size;
+        } else {
+                int fd;
+                if (0 > (fd = open(target, O_RDONLY)) ||
+                    0 > ioctl(fd, BLKGETSIZE64, &(m->size)) ||
+                    0 > close(fd)) {
+                        fprintf(stderr, "could not read block device size '%s': %s\n",
+                                target, strerror(errno));
+                        exit(EXIT_FAILURE);
+                }
+        }
+        m->file_list->size = m->size;
 	m->file_count = 1;
 
 	/* now return 0 since it isn't a directory */
