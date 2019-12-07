@@ -393,6 +393,9 @@ static void print_help()
 	  "                                  default is <name>.torrent\n"
 	  "  -p, --private                 - set the private flag\n"
 	  "  -s, --source=<source>         - add source string embedded in infohash\n"
+	  "  -b, --created-by=<name>       - set the name of the program that created the\n"
+	  "                                  file aka \"Created by\" field.\n"
+	  "                                  default: \"pmktorrent "VERSION"\"\n"
 #ifdef USE_PTHREADS
 	  "  -t, --threads=<n>             - use <n> threads for calculating hashes\n"
 	  "                                  default is the number of CPU cores\n"
@@ -415,6 +418,9 @@ static void print_help()
 	  "                      default is <name>.torrent\n"
 	  "  -p                - set the private flag\n"
 	  "  -s                - add source string embedded in infohash\n"
+          "  -b <name>         - set the name of the program that created the file aka\n"
+          "                      \"Created by\" field.\n"
+          "                      default: \"pmktorrent "VERSION"\"\n"
 #ifdef USE_PTHREADS
 	  "  -t <n>            - use <n> threads for calculating hashes\n"
 	  "                      default is the number of CPU cores\n"
@@ -437,6 +443,7 @@ static void print_announce_list(llist_t *list)
 {
 	unsigned int n;
 
+	printf("  Announce URLs:\n");
 	for (n = 1; list; list = list->next, n++) {
 		slist_t *l = list->l;
 
@@ -451,7 +458,7 @@ static void print_announce_list(llist_t *list)
  */
 static void print_web_seed_list(slist_t *list)
 {
-	printf("  Web Seed URL: ");
+	printf("  Web Seed URL:  ");
 
 	if (list == NULL) {
 		printf("none\n");
@@ -468,25 +475,25 @@ static void print_web_seed_list(slist_t *list)
  */
 static void dump_options(metafile_t *m)
 {
-	printf("Options:\n"
-	       "  Announce URLs:\n");
+	printf("Options:\n");
 
-	print_announce_list(m->announce_list);
+	if (m->announce_list != NULL)
+                print_announce_list(m->announce_list);
 
-	printf("  Torrent name: %s\n"
-	       "  Metafile:     %s\n"
-	       "  Piece length: %u\n"
+	printf("  Torrent name:  %s\n"
+	       "  Metafile:      %s\n"
+	       "  Piece length:  %u\n"
 #ifdef USE_PTHREADS
-	       "  Threads:      %u\n"
+	       "  Threads:       %u\n"
 #endif
-	       "  Be verbose:   yes\n",
+	       "  Be verbose:    yes\n",
 	       m->torrent_name, m->metainfo_file_path, m->piece_length
 #ifdef USE_PTHREADS
 	       ,m->threads
 #endif
 	       );
 
-	printf("  Write date:   ");
+	printf("  Write date:    ");
 	if (m->no_creation_date)
 		printf("no\n");
 	else
@@ -496,13 +503,15 @@ static void dump_options(metafile_t *m)
 
 	/* Print source string only if set */
 	if (m->source)
-		printf("\n Source:      %s\n\n", m->source);
+		printf("\n Source:       %s\n\n", m->source);
 
-	printf("  Comment:      ");
+	printf("  Comment:       ");
 	if (m->comment == NULL)
-		printf("none\n\n");
+		printf("none\n");
 	else
-		printf("\"%s\"\n\n", m->comment);
+		printf("\"%s\"\n", m->comment);
+
+	printf("  Created by:    \"%s\"\n", m->created_by);
 }
 
 /*
@@ -528,6 +537,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 		{"output", 1, NULL, 'o'},
 		{"private", 0, NULL, 'p'},
 		{"source", 1, NULL, 's'},
+		{"created-by", 2, NULL, 'b'}
 #ifdef USE_PTHREADS
 		{"threads", 1, NULL, 't'},
 #endif
@@ -537,11 +547,11 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 	};
 #endif
 
-	/* now parse the command line options given */
+/* now parse the command line options given */
 #ifdef USE_PTHREADS
-#define OPT_STRING "A:a:c:dhl:n:o:ps:t:vw:"
+#define OPT_STRING "A:a:c:dhl:n:o:ps:b:t:vw:"
 #else
-#define OPT_STRING "A:a:c:dhl:n:o:ps:vw:"
+#define OPT_STRING "A:a:c:dhl:n:o:ps:b:vw:"
 #endif
 #ifdef USE_LONG_OPTIONS
 	while ((c = getopt_long(argc, argv, OPT_STRING,
@@ -634,6 +644,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 		case 's':
 			m->source = optarg;
 			break;
+                case 'b':
+		        m->created_by = optarg;
+		        break;
 #ifdef USE_PTHREADS
 		case 't':
 			m->threads = atoi(optarg);

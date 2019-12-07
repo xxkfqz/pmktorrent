@@ -47,6 +47,7 @@ typedef struct {
 	int no_creation_date;      /* don't write the creation date */
 	int private;               /* set the private flag */
 	char *source;              /* set source for private trackers */
+	char *created_by;          /* "Created by" field */
 	int verbose;               /* be verbose */
 #ifdef USE_PTHREADS
 	unsigned int threads;      /* number of threads used for hashing */

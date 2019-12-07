@@ -8,11 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Support for block devices (#9 by @infinity0)
 - Implement quicksort for faster file path sorting (#33 by @aheadley)
+- Optional "Created by" field (`-b`).
 - `CHANGELOG.md`
 ### Changed
 - Project name
 - Help page
 - "Missing operator" message
+- Verbose message
 - README
 ### Fixed
 - Announce help removed from short options (#26 by @p-roesink)

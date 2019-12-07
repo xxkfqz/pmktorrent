@@ -150,6 +150,7 @@ int main(int argc, char *argv[])
 		0,    /* no_creation_date */
 		0,    /* private */
 		NULL, /* source string */
+                "pmktorrent " VERSION, /* created_by */
 		0,    /* verbose */
 #ifdef USE_PTHREADS
 		0,    /* threads, initialised by init() */
