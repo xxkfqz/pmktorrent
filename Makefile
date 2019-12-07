@@ -30,12 +30,22 @@
 # faster. Much faster on systems with multiple CPUs and fast harddrives.
 USE_PTHREADS = 1
 
+# Enable long options, started with two dashes.
+USE_LONG_OPTIONS = 1
+
+# Set the number of microseconds pmktorrent will wait between every progress
+# report when hashing multithreaded. Default is 200000, that is 0.2 seconds
+# between every update.
+PROGRESS_PERIOD = 200000
+
+# Maximum number of file descriptors pmktorrent will open when scanning the
+# directory. Default is 100, but I have no idea what a sane default for this
+# value is, so your number is probably better.
+MAX_OPENFD = 100
+
 # Use the SHA1 implementation in the OpenSSL library instead of compiling our
 # own.
 #USE_OPENSSL = 1
-
-# Enable long options, started with two dashes.
-USE_LONG_OPTIONS = 1
 
 # This is needed on certain 32bit OSes (notably 32bit Linux) to support
 # files and torrents > 2Gb.
@@ -47,17 +57,7 @@ USE_LONG_OPTIONS = 1
 # but who'd want to do that?
 #NO_HASH_CHECK = 1
 
-# Set the number of microseconds pmktorrent will wait between every progress
-# report when hashing multithreaded. Default is 200000, that is 0.2 seconds
-# between every update.
-#PROGRESS_PERIOD = 200000
-
-# Maximum number of file descriptors pmktorrent will open when scanning the
-# directory. Default is 100, but I have no idea what a sane default for this
-# value is, so your number is probably better.
-#MAX_OPENFD = 100
-
-# Enable leftover debugging code.  Usually just spams you with lots of useless
+# Enable leftover debugging code. Usually just spams you with lots of useless
 # information.
 #DEBUG = 1
 
