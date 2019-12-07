@@ -1,11 +1,12 @@
 Copyright (C) 2007, 2009 Emil Renner Berthing
+Edited 2019 xxkfqz <xxkfqz@gmail.com>
 
-mktorrent is licensed under the terms of the GNU GPL version 2, or
+pmktorrent is licensed under the terms of the GNU GPL version 2, or
 (at your option) any later version with one special exception:
 
 Permission is granted to link the code in this release with the
 OpenSSL project's 'OpenSSL' library and to distribute the linked
-executables.  Works derived from mktorrent may, at their authors'
+executables.  Works derived from pmktorrent may, at their authors'
 discretion, keep or delete this exception.
 
 

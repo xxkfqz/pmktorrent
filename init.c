@@ -1,13 +1,14 @@
 /*
-This file is part of mktorrent
+This file is part of pmktorrent
 Copyright (C) 2007, 2009 Emil Renner Berthing
+Edited 2019 xxkfqz <xxkfqz@gmail.com>
 
-mktorrent is free software; you can redistribute it and/or modify
+pmktorrent is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 
-mktorrent is distributed in the hope that it will be useful,
+pmktorrent is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -35,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <getopt.h>       /* getopt_long() */
 #endif
 
-#include "mktorrent.h"
+#include "pmktorrent.h"
 #include "ftw.h"
 
 #define EXPORT
@@ -374,55 +375,59 @@ static int sort_file_list(void *data)
 static void print_help()
 {
 	printf(
-	  "Usage: mktorrent [OPTIONS] <target directory or filename>\n\n"
+	  "Usage: pmktorrent [OPTIONS] <target directory, block device or filename>\n\n"
 	  "Options:\n"
 #ifdef USE_LONG_OPTIONS
-	  "-a, --announce=<url>[,<url>]* : specify the full announce URLs\n"
-	  "                                additional -a adds backup trackers\n"
-   	  "-A, --announce-file=<file>    : specify a file from which a full announce URL is read\n"
-	  "-c, --comment=<comment>       : add a comment to the metainfo\n"
-	  "-d, --no-date                 : don't write the creation date\n"
-	  "-h, --help                    : show this help screen\n"
-	  "-l, --piece-length=<n>        : set the piece length to 2^n bytes,\n"
-	  "                                default is 18, that is 2^18 = 256kb\n"
-	  "-n, --name=<name>             : set the name of the torrent\n"
-	  "                                default is the basename of the target\n"
-	  "-o, --output=<filename>       : set the path and filename of the created file\n"
-	  "                                default is <name>.torrent\n"
-	  "-p, --private                 : set the private flag\n"
-	  "-s, --source=<source>         : add source string embedded in infohash\n"
+	  "  -a, --announce=<url>[,<url>]* - specify the full announce URLs\n"
+	  "                                  additional -a adds backup trackers\n"
+	  "  -A, --announce-file=<file>    - specify a file from which a full announce URL\n"
+	  "                                  is read\n"
+	  "  -c, --comment=<comment>       - add a comment to the metainfo\n"
+	  "  -d, --no-date                 - don't write the creation date\n"
+	  "  -h, --help                    - show this help screen\n"
+	  "  -l, --piece-length=<n>        - set the piece length to 2^n bytes,\n"
+	  "                                  default is 18, that is 2^18 = 256kb\n"
+	  "  -n, --name=<name>             - set the name of the torrent\n"
+	  "                                  default is the basename of the target\n"
+	  "  -o, --output=<filename>       - set the path and filename of the created file\n"
+	  "                                  default is <name>.torrent\n"
+	  "  -p, --private                 - set the private flag\n"
+	  "  -s, --source=<source>         - add source string embedded in infohash\n"
 #ifdef USE_PTHREADS
-	  "-t, --threads=<n>             : use <n> threads for calculating hashes\n"
-	  "                                default is the number of CPU cores\n"
+	  "  -t, --threads=<n>             - use <n> threads for calculating hashes\n"
+	  "                                  default is the number of CPU cores\n"
 #endif
-	  "-v, --verbose                 : be verbose\n"
-	  "-w, --web-seed=<url>[,<url>]* : add web seed URLs\n"
-	  "                                additional -w adds more URLs\n"
+	  "  -v, --verbose                 - be verbose\n"
+	  "  -w, --web-seed=<url>[,<url>]* - add web seed URLs\n"
+	  "                                  additional -w adds more URLs\n"
 #else
-	  "-a <url>[,<url>]* : specify the full announce URLs\n"
-	  "                    additional -a adds backup trackers\n"
-          "-A <file>         : specify a file from which a full announce URL is read\n"
-	  "-c <comment>      : add a comment to the metainfo\n"
-	  "-d                : don't write the creation date\n"
-	  "-h                : show this help screen\n"
-	  "-l <n>            : set the piece length to 2^n bytes,\n"
-	  "                    default is 18, that is 2^18 = 256kb\n"
-	  "-n <name>         : set the name of the torrent,\n"
-	  "                    default is the basename of the target\n"
-	  "-o <filename>     : set the path and filename of the created file\n"
-	  "                    default is <name>.torrent\n"
-	  "-p                : set the private flag\n"
-	  "-s                : add source string embedded in infohash\n"
+	  "  -a <url>[,<url>]* - specify the full announce URLs\n"
+	  "                      additional -a adds backup trackers\n"
+          "  -A <file>         - specify a file from which a full announce URL is read\n"
+	  "  -c <comment>      - add a comment to the metainfo\n"
+	  "  -d                - don't write the creation date\n"
+	  "  -h                - show this help screen\n"
+	  "  -l <n>            - set the piece length to 2^n bytes,\n"
+	  "                      default is 18, that is 2^18 = 256kb\n"
+	  "  -n <name>         - set the name of the torrent,\n"
+	  "                      default is the basename of the target\n"
+	  "  -o <filename>     - set the path and filename of the created file\n"
+	  "                      default is <name>.torrent\n"
+	  "  -p                - set the private flag\n"
+	  "  -s                - add source string embedded in infohash\n"
 #ifdef USE_PTHREADS
-	  "-t <n>            : use <n> threads for calculating hashes\n"
-	  "                    default is the number of CPU cores\n"
+	  "  -t <n>            - use <n> threads for calculating hashes\n"
+	  "                      default is the number of CPU cores\n"
 #endif
-	  "-v                : be verbose\n"
-	  "-w <url>[,<url>]* : add web seed URLs\n"
-	  "                    additional -w adds more URLs\n"
+	  "  -v                - be verbose\n"
+	  "  -w <url>[,<url>]* - add web seed URLs\n"
+	  "                      additional -w adds more URLs\n"
 #endif
-	  "\nPlease send bug reports, patches, feature requests, praise and\n"
-	  "general gossip about the program to: mktorrent@rudde.org\n");
+          "\nCopyright (C) 2007, 2009 Emil Renner Berthing\n"
+          "Edited 2019 xxkfqz <xxkfqz@gmail.com>\n\n"
+	  "Please send bug reports, patches, feature requests, praise and\n"
+	  "general gossip about the program to: "
+          "https://github.com/xxkfqz/pmktorrent\n");
 }
 
 /*
@@ -670,8 +675,8 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 
 	/* ..and a file or directory from which to create the torrent */
 	if (optind >= argc) {
-		fprintf(stderr, "Must specify the contents, "
-			"use -h for help\n");
+		fprintf(stderr, "Missing operand. Try '-h' or --help', "
+			"for more information\n");
 		exit(EXIT_FAILURE);
 	}
 

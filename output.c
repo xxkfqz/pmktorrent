@@ -1,13 +1,14 @@
 /*
-This file is part of mktorrent
+This file is part of pmktorrent
 Copyright (C) 2007, 2009 Emil Renner Berthing
+Edited 2019 xxkfqz <xxkfqz@gmail.com>
 
-mktorrent is free software; you can redistribute it and/or modify
+pmktorrent is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 
-mktorrent is distributed in the hope that it will be useful,
+pmktorrent is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
@@ -28,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include "sha1.h"
 #endif
 
-#include "mktorrent.h"
+#include "pmktorrent.h"
 
 #define EXPORT
 #endif /* ALLINONE */
@@ -139,7 +140,7 @@ EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
 				(unsigned long)strlen(m->comment),
 				m->comment);
 	/* I made this! */
-	fprintf(f, "10:created by13:mktorrent " VERSION);
+	fprintf(f, "10:created by13:pmktorrent " VERSION);
 	/* add the creation date */
 	if (!m->no_creation_date)
 		fprintf(f, "13:creation datei%lde",
