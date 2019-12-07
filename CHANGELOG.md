@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Project name
 - Help page
 - "Missing operator" message
+- README
 ### Fixed
 - Announce help removed from short options (#26 by @p-roesink)
 
