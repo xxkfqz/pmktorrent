@@ -299,7 +299,7 @@ EXPORT unsigned char *make_hash(metafile_t *m)
 	pthread_t print_progress_thread;	/* progress printer thread */
 	pthread_t *workers;
 	unsigned char *hash_string;		/* the hash string */
-	int i;
+	unsigned int i;
 	int err;
 
 	workers = malloc(m->threads * sizeof(pthread_t));

@@ -1,12 +1,13 @@
 # pmktorrent
-pmktorrent is a fork of [mktorrent](https://github.com/Rudde/mktorrent) with some patches
+A simple command line utility to create BitTorrent metainfo files. It is a fork of [mktorrent](https://github.com/Rudde/mktorrent).
 
 # How to build
-- `make` to build the program.
-- `make install` to install the program to `/usr/local/bin`.
+```
+make
+make install
+```
 
 ## Build options
-
 ### Enabled by default
 - `USE_PTHREADS` - Use multiple POSIX threads for calculating hashes. This should be slightly faster. Much faster on systems with multiple CPUs and fast harddrives.
 - `USE_LONG_OPTIONS` - Enable long options, started with two dashes.

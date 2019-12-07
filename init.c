@@ -322,8 +322,8 @@ static int process_node(const char *path, const struct stat *sb, void *data)
 
 static int cmp_flist(const void *left, const void *right)
 {
-	flist_t *f_left = *(const flist_t **)left;
-	flist_t *f_right = *(const flist_t **)right;
+	flist_t *f_left = *(flist_t **)left;
+	flist_t *f_right = *(flist_t **)right;
 	return strcmp(f_left->path, f_right->path);
 }
 
@@ -331,7 +331,7 @@ static int sort_file_list(void *data)
 {
 	flist_t **nodes;
 	flist_t *current_node;
-	size_t i = 0;
+	int i = 0;
 	metafile_t *m = data;
 
 	/* no need to sort a list with a single item */
@@ -357,7 +357,7 @@ static int sort_file_list(void *data)
 	qsort(nodes, m->file_count, sizeof(flist_t*), cmp_flist);
 
 	/* fix the .next pointers on each node */
-	for (i=1; i < m->file_count; i++) {
+	for (i = 1; i < (int)m->file_count; i++) {
 		nodes[i-1]->next = nodes[i];
 	}
 	nodes[i-1]->next = NULL;
@@ -375,7 +375,7 @@ static int sort_file_list(void *data)
 static void print_help()
 {
 	printf(
-	  "Usage: pmktorrent [OPTIONS] <target directory, block device or filename>\n\n"
+	  "Usage: " PROGRAM " [OPTIONS] <target directory, block device or filename>\n\n"
 	  "Options:\n"
 #ifdef USE_LONG_OPTIONS
 	  "  -a, --announce=<url>[,<url>]* - specify the full announce URLs\n"
@@ -395,7 +395,7 @@ static void print_help()
 	  "  -s, --source=<source>         - add source string embedded in infohash\n"
 	  "  -b, --created-by=<name>       - set the name of the program that created the\n"
 	  "                                  file aka \"Created by\" field.\n"
-	  "                                  default: \"pmktorrent "VERSION"\"\n"
+	  "                                  default: \"" PROGRAM" "VERSION"\"\n"
 #ifdef USE_PTHREADS
 	  "  -t, --threads=<n>             - use <n> threads for calculating hashes\n"
 	  "                                  default is the number of CPU cores\n"
@@ -537,7 +537,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 		{"output", 1, NULL, 'o'},
 		{"private", 0, NULL, 'p'},
 		{"source", 1, NULL, 's'},
-		{"created-by", 2, NULL, 'b'}
+		{"created-by", 2, NULL, 'b'},
 #ifdef USE_PTHREADS
 		{"threads", 1, NULL, 't'},
 #endif
@@ -702,11 +702,12 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 			exit(EXIT_FAILURE);
 		}
 	} else {
-#ifdef _SC_NPROCESSORS_ONLN
-		m->threads = sysconf(_SC_NPROCESSORS_ONLN);
-		if (m->threads == -1)
-#endif
-			m->threads = 2; /* some sane default */
+        #ifdef _SC_NPROCESSORS_ONLN
+	        long sysconf_result = sysconf(_SC_NPROCESSORS_ONLN);
+	        m->threads = (unsigned int)sysconf_result;
+		if (sysconf_result == -1)
+        #endif
+                        m->threads = 2; /* some sane default */
 	}
 #endif
 

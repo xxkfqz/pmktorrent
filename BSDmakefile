@@ -22,6 +22,7 @@ CC      ?= cc
 CFLAGS  ?= -O2 -Wall
 INSTALL ?= install
 PREFIX  ?= /usr/local
+STRIP   ?= strip
 
 .ifdef USE_PTHREADS
 DEFINES += -DUSE_PTHREADS
@@ -58,10 +59,11 @@ DEFINES += -DDEBUG
 OBJS = $(SRCS:.c=.o)
 
 all: $(program)
+	$(STRIP) -s $(program)
 
 .SUFFIXES: .o .c
 .c.o:
-	$(CC) $(CFLAGS) $(DEFINES) -DPRIoff="\"`./prefix`d\"" -DVERSION="\"$(version)\"" -c $(.IMPSRC)
+	$(CC) $(CFLAGS) $(DEFINES) -DPRIoff="\"`./prefix`d\"" -DPROGRAM="\"$(program)\"" -DVERSION="\"$(version)\"" -c $(.IMPSRC)
 
 $(OBJS): $(HEADERS) prefix
 

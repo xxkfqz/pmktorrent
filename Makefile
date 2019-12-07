@@ -31,7 +31,7 @@
 USE_PTHREADS = 1
 
 # Enable long options, started with two dashes.
-#USE_LONG_OPTIONS = 1
+USE_LONG_OPTIONS = 1
 
 # Set the number of microseconds pmktorrent will wait between every progress
 # report when hashing multithreaded. Default is 200000, that is 0.2 seconds

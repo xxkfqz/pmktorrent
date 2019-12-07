@@ -68,7 +68,7 @@ int main()
 		(u_int) sizeof(long int), 8 * (u_int) sizeof(long int));
 	fprintf(stderr, "sizeof(" xstr(TYPE) ") = %u, %u bits\n",
 		(u_int) sizeof(TYPE), 8 * (u_int) sizeof(TYPE));
-#endif				/* DEBUG */
+#endif	/* DEBUG */
 
 	printf("%s\n", prefix[sizeof(TYPE)]);
 
