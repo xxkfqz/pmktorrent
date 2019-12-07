@@ -22,7 +22,6 @@ CC      ?= cc
 CFLAGS  ?= -O2 -Wall
 INSTALL ?= install
 PREFIX  ?= /usr/local
-STRIP   ?= strip
 
 .ifdef USE_PTHREADS
 DEFINES += -DUSE_PTHREADS
