@@ -4,12 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.2] - Work in progress
+## [1.2] - 2019-12-08
 ### Added
 - Support for block devices (#9 by @infinity0)
 - Implement quicksort for faster file path sorting (#33 by @aheadley)
 - Optional "Created by" field (`-b`)
 - `CHANGELOG.md`
+- Warning message when files number can causes problems for users of other clients.
 ### Changed
 - Project name
 - Help page
