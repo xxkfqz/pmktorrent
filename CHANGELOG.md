@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Implement quicksort for faster file path sorting (#33 by @aheadley)
 - Optional "Created by" field (`-b`)
 - `CHANGELOG.md`
-- Warning message when files number can causes problems for users of other clients.
+- Warning message when files number can causes problems for users of other
+  clients (issue #34 by @colindean)
 ### Changed
 - Project name
 - Help page
@@ -19,7 +20,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - README
 ### Fixed
 - Announce help removed from short options (#26 by @p-roesink)
-- Writing to stdout instead of file (`--output=-`) (issue #36 by Ivan Shmakov <ivan@siamics.net>)
+- Writing to stdout instead of file (`--output=-`) (issue #36 by Ivan Shmakov
+  <ivan@siamics.net>)
 
 ## [1.1] - 2017-01-11
 ### Added
