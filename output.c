@@ -35,6 +35,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #endif /* ALLINONE */
 
 /*
+ * I don’t know exactly how many files there should be, so that their
+ * number causes problems for users of other clients.
+ */
+#define FILES_NUMBER_WARNING 10000000
+
+/*
  * write announce list
  */
 static void write_announce_list(FILE *f, llist_t *list)
@@ -117,6 +123,10 @@ static void write_web_seed_list(FILE *f, slist_t *list)
 EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
 {
         fprintf(stderr, "Total number of files: %" PRIu64 "\n", m->file_count);
+        if (m->file_count >= FILES_NUMBER_WARNING)
+                fprintf(stderr,
+                        "Warning: the current number of files can cause"
+                        "problems on torrent clients");
 
         /* let the user know we've started writing the metainfo file */
         fprintf(stderr, "Writing metainfo file... ");
@@ -171,7 +181,8 @@ EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
                 fprintf(f, "7:privatei1e");
 
         if (m->source)
-                fprintf(f, "6:source%lu:%s", (unsigned long)strlen(m->source), m->source);
+                fprintf(f, "6:source%lu:%s", (unsigned long)strlen(m->source),
+                        m->source);
 
         /* end the info section */
         fprintf(f, "e");

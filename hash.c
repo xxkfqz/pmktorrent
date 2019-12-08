@@ -134,7 +134,10 @@ EXPORT unsigned char *make_hash(metafile_t *m)
                 }
         }
 
-        /* finally append the hash of the last irregular piece to the hash string */
+        /*
+         * finally append the hash of the last irregular piece to the hash
+         * string
+         */
         if (r) {
                 SHA1_Init(&c);
                 SHA1_Update(&c, read_buf, r);
@@ -145,8 +148,8 @@ EXPORT unsigned char *make_hash(metafile_t *m)
         counter += r;
         if (counter != m->size) {
                 fprintf(stderr, "Counted %" PRId64 " bytes, "
-                                                   "but hashed %" PRId64 " bytes. "
-                                                                         "Something is wrong...\n", m->size, counter);
+                        "but hashed %" PRId64 " bytes. "
+                        "Something is wrong...\n", m->size, counter);
                 exit(EXIT_FAILURE);
         }
 #endif

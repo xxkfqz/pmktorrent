@@ -267,7 +267,10 @@ static void read_files(metafile_t *m, queue_t *q, unsigned char *pos)
                 }
         }
 
-        /* finally append the hash of the last irregular piece to the hash string */
+        /*
+         * finally append the hash of the last irregular piece to the hash
+         * string
+         */
         if (r) {
                 p->dest = pos;
                 p->len = r;
@@ -279,9 +282,8 @@ static void read_files(metafile_t *m, queue_t *q, unsigned char *pos)
         counter += r;
         if (counter != m->size) {
                 fprintf(stderr,
-                        "Counted %" PRIu64 " bytes, but hashed %" PRIu64 " bytes. Something is wrong...\n",
-                        m->size,
-                        counter);
+                        "Counted %" PRIu64 " bytes, but hashed %" PRIu64
+                        " bytes. Something is wrong...\n", m->size, counter);
                 exit(EXIT_FAILURE);
         }
 #endif
