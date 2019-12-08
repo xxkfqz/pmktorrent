@@ -35,42 +35,42 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 int main()
 {
-	unsigned int i;
-	char *prefix[9];
+        unsigned int i;
+        char *prefix[9];
 
-	for (i = 0; i < 9; i++)
-		prefix[i] = NULL;
+        for (i = 0; i < 9; i++)
+                prefix[i] = NULL;
 
-	prefix[1] = "hh";
-	prefix[2] = "h";
+        prefix[1] = "hh";
+        prefix[2] = "h";
 
-	prefix[8] = "ll";
-	prefix[sizeof(int)] = "";
-	prefix[sizeof(long int)] = "l";
+        prefix[8] = "ll";
+        prefix[sizeof(int)] = "";
+        prefix[sizeof(long int)] = "l";
 
 #ifdef DEBUG
 #define xstr(s) str(s)
 #define str(s) #s
 
 #ifdef _LARGEFILE_SOURCE
-	fprintf(stderr, "_LARGEFILE_SOURCE is set\n");
+        fprintf(stderr, "_LARGEFILE_SOURCE is set\n");
 #endif
 
 #ifdef _FILE_OFFSET_BITS
-	fprintf(stderr, "_FILE_OFFSET_BITS = %u\n", _FILE_OFFSET_BITS);
+        fprintf(stderr, "_FILE_OFFSET_BITS = %u\n", _FILE_OFFSET_BITS);
 #endif
 
-	fprintf(stderr, "__WORDSIZE is %d\n", __WORDSIZE);
-	fprintf(stderr, "PRIdOFF_T is " PRIdOFF_T "\n");
-	fprintf(stderr, "sizeof(int) = %u, %u bits\n",
-		(u_int) sizeof(int), 8 * (u_int) sizeof(int));
-	fprintf(stderr, "sizeof(long int) = %u, %u bits\n",
-		(u_int) sizeof(long int), 8 * (u_int) sizeof(long int));
-	fprintf(stderr, "sizeof(" xstr(TYPE) ") = %u, %u bits\n",
-		(u_int) sizeof(TYPE), 8 * (u_int) sizeof(TYPE));
+        fprintf(stderr, "__WORDSIZE is %d\n", __WORDSIZE);
+        fprintf(stderr, "PRIdOFF_T is " PRIdOFF_T "\n");
+        fprintf(stderr, "sizeof(int) = %u, %u bits\n",
+                (u_int) sizeof(int), 8 * (u_int) sizeof(int));
+        fprintf(stderr, "sizeof(long int) = %u, %u bits\n",
+                (u_int) sizeof(long int), 8 * (u_int) sizeof(long int));
+        fprintf(stderr, "sizeof(" xstr(TYPE) ") = %u, %u bits\n",
+                (u_int) sizeof(TYPE), 8 * (u_int) sizeof(TYPE));
 #endif	/* DEBUG */
 
-	printf("%s\n", prefix[sizeof(TYPE)]);
+        printf("%s\n", prefix[sizeof(TYPE)]);
 
-	return EXIT_SUCCESS;
+        return EXIT_SUCCESS;
 }

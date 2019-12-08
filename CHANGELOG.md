@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [1.2] - 2019-12-07
+## [1.2] - Work in progress
 ### Added
 - Support for block devices (#9 by @infinity0)
 - Implement quicksort for faster file path sorting (#33 by @aheadley)
@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - README
 ### Fixed
 - Announce help removed from short options (#26 by @p-roesink)
+- Writing to stdout instead of file (`--output=-`) (issue #36 by Ivan Shmakov <ivan@siamics.net>)
 
 ## [1.1] - 2017-01-11
 ### Added

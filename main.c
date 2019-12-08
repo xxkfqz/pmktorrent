@@ -95,27 +95,32 @@ extern void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string);
  */
 static FILE *open_file(const char *path)
 {
-	int fd;  /* file descriptor */
-	FILE *f; /* file stream */
+        if (strcmp ("-", path) == 0) {
+                /* just return stdout for --output=- */
+                return stdout;
+        }
 
-	/* open and create the file if it doesn't exist already */
-	fd = open(path, O_WRONLY | O_BINARY | O_CREAT | O_EXCL,
-		       S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
-	if (fd < 0) {
-		fprintf(stderr, "Error creating '%s': %s\n",
-				path, strerror(errno));
-		exit(EXIT_FAILURE);
-	}
+        int fd;  /* file descriptor */
+        FILE *f; /* file stream */
 
-	/* create the stream from this filedescriptor */
-	f = fdopen(fd, "wb");
-	if (f == NULL) {
-		fprintf(stderr,	"Error creating stream for '%s': %s\n",
-				path, strerror(errno));
-		exit(EXIT_FAILURE);
-	}
+        /* open and create the file if it doesn't exist already */
+        fd = open(path, O_WRONLY | O_BINARY | O_CREAT | O_EXCL,
+                       S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+        if (fd < 0) {
+                fprintf(stderr, "Error creating '%s': %s\n",
+                                path, strerror(errno));
+                exit(EXIT_FAILURE);
+        }
 
-	return f;
+        /* create the stream from this filedescriptor */
+        f = fdopen(fd, "wb");
+        if (f == NULL) {
+                fprintf(stderr,	"Error creating stream for '%s': %s\n",
+                                path, strerror(errno));
+                exit(EXIT_FAILURE);
+        }
+
+        return f;
 }
 
 /*
@@ -123,12 +128,17 @@ static FILE *open_file(const char *path)
  */
 static void close_file(FILE *f)
 {
-	/* close the metainfo file */
-	if (fclose(f)) {
-		fprintf(stderr, "Error closing stream: %s\n",
-				strerror(errno));
-		exit(EXIT_FAILURE);
+        if (f == stdout) {
+		/* do not attempt to fclose (stdout) */
+                return;
 	}
+
+        /* close the metainfo file */
+        if (fclose(f)) {
+                fprintf(stderr, "Error closing stream: %s\n",
+                                strerror(errno));
+                exit(EXIT_FAILURE);
+        }
 }
 
 /*
@@ -136,45 +146,45 @@ static void close_file(FILE *f)
  */
 int main(int argc, char *argv[])
 {
-	FILE *file;	/* stream for writing to the metainfo file */
-	metafile_t m = {
-		/* options */
-		18,   /* piece_length, 2^18 = 256kb by default */
+        FILE *file;	/* stream for writing to the metainfo file */
+        metafile_t m = {
+                /* options */
+                18,   /* piece_length, 2^18 = 256kb by default */
                 NULL, /* announce_from_file */
-		NULL, /* announce_list */
-		NULL, /* torrent_name */
-		NULL, /* metainfo_file_path */
-		NULL, /* web_seed_url */
-		NULL, /* comment */
-		0,    /* target_is_directory  */
-		0,    /* no_creation_date */
-		0,    /* private */
-		NULL, /* source string */
+                NULL, /* announce_list */
+                NULL, /* torrent_name */
+                NULL, /* metainfo_file_path */
+                NULL, /* web_seed_url */
+                NULL, /* comment */
+                0,    /* target_is_directory  */
+                0,    /* no_creation_date */
+                0,    /* private */
+                NULL, /* source string */
                 PROGRAM " " VERSION, /* created_by */
-		0,    /* verbose */
+                0,    /* verbose */
 #ifdef USE_PTHREADS
-		0,    /* threads, initialised by init() */
+                0,    /* threads, initialised by init() */
 #endif
-		/* information calculated by read_dir() */
-		0,    /* size */
-		NULL, /* file_list */
-		0,    /* file_count */
-		0     /* pieces */
-	};
+                /* information calculated by read_dir() */
+                0,    /* size */
+                NULL, /* file_list */
+                0,    /* file_count */
+                0     /* pieces */
+        };
 
-	/* process options */
-	init(&m, argc, argv);
+        /* process options */
+        init(&m, argc, argv);
 
-	/* open the file stream now, so we don't have to abort
-	   _after_ we did all the hashing in case we fail */
-	file = open_file(m.metainfo_file_path);
+        /* open the file stream now, so we don't have to abort
+           _after_ we did all the hashing in case we fail */
+        file = open_file(m.metainfo_file_path);
 
-	/* calculate hash string and write the metainfo to file */
-	write_metainfo(file, &m, make_hash(&m));
+        /* calculate hash string and write the metainfo to file */
+        write_metainfo(file, &m, make_hash(&m));
 
-	/* close the file stream */
-	close_file(file);
+        /* close the file stream */
+        close_file(file);
 
-	/* yeih! everything seemed to go as planned */
-	return EXIT_SUCCESS;
+        /* yeih! everything seemed to go as planned */
+        return EXIT_SUCCESS;
 }
