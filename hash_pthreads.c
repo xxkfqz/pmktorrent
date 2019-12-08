@@ -217,7 +217,7 @@ static void read_files(metafile_t *m, queue_t *q, unsigned char *pos)
         size_t r = 0;        /* number of bytes read from file(s)
                                 into the read buffer */
 #ifndef NO_HASH_CHECK
-        int64_t counter = 0;	/* number of bytes hashed
+        uint64_t counter = 0;	/* number of bytes hashed
                                    should match size when done */
 #endif
         piece_t *p = get_free(q, m->piece_length);
@@ -278,9 +278,10 @@ static void read_files(metafile_t *m, queue_t *q, unsigned char *pos)
 #ifndef NO_HASH_CHECK
         counter += r;
         if (counter != m->size) {
-                fprintf(stderr, "Counted %" PRId64 " bytes, "
-                                                   "but hashed %" PRId64 " bytes. "
-                                                                         "Something is wrong...\n", m->size, counter);
+                fprintf(stderr,
+                        "Counted %" PRIu64 " bytes, but hashed %" PRIu64 " bytes. Something is wrong...\n",
+                        m->size,
+                        counter);
                 exit(EXIT_FAILURE);
         }
 #endif

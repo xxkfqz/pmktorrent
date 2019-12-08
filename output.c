@@ -116,6 +116,8 @@ static void write_web_seed_list(FILE *f, slist_t *list)
  */
 EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
 {
+        fprintf(stderr, "Total number of files: %" PRIu64 "\n", m->file_count);
+
         /* let the user know we've started writing the metainfo file */
         fprintf(stderr, "Writing metainfo file... ");
         fflush(stdout);

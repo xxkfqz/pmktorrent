@@ -490,14 +490,17 @@ static void dump_options(metafile_t *m)
                 "  Torrent name:  %s\n"
                 "  Metafile:      %s\n"
                 "  Piece length:  %u\n"
+
                 #ifdef USE_PTHREADS
                 "  Threads:       %u\n"
                 #endif
+
                 "  Be verbose:    yes\n",
                 m->torrent_name, m->metainfo_file_path, m->piece_length
-#ifdef USE_PTHREADS
+
+                #ifdef USE_PTHREADS
                 ,m->threads
-#endif
+                #endif
         );
 
         fprintf(stderr, "  Write date:    ");
