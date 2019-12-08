@@ -105,10 +105,10 @@ static FILE *open_file(const char *path)
 
         /* open and create the file if it doesn't exist already */
         fd = open(path, O_WRONLY | O_BINARY | O_CREAT | O_EXCL,
-                       S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+                  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
         if (fd < 0) {
                 fprintf(stderr, "Error creating '%s': %s\n",
-                                path, strerror(errno));
+                        path, strerror(errno));
                 exit(EXIT_FAILURE);
         }
 
@@ -116,7 +116,7 @@ static FILE *open_file(const char *path)
         f = fdopen(fd, "wb");
         if (f == NULL) {
                 fprintf(stderr,	"Error creating stream for '%s': %s\n",
-                                path, strerror(errno));
+                        path, strerror(errno));
                 exit(EXIT_FAILURE);
         }
 
@@ -129,14 +129,14 @@ static FILE *open_file(const char *path)
 static void close_file(FILE *f)
 {
         if (f == stdout) {
-		/* do not attempt to fclose (stdout) */
+                /* do not attempt to fclose (stdout) */
                 return;
-	}
+        }
 
         /* close the metainfo file */
         if (fclose(f)) {
                 fprintf(stderr, "Error closing stream: %s\n",
-                                strerror(errno));
+                        strerror(errno));
                 exit(EXIT_FAILURE);
         }
 }

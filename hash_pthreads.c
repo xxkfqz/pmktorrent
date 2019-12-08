@@ -113,7 +113,7 @@ static piece_t *get_full(queue_t *q)
         piece_t *r;
 
         pthread_mutex_lock(&q->mutex_full);
-again:
+        again:
         if (q->full) {
                 r = q->full;
                 q->full = r->next;
@@ -179,7 +179,7 @@ static void *print_progress(void *data)
         err = pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
         if (err) {
                 fprintf(stderr, "Error setting thread cancel type: %s\n",
-                                strerror(err));
+                        strerror(err));
                 exit(EXIT_FAILURE);
         }
 
@@ -228,7 +228,7 @@ static void read_files(metafile_t *m, queue_t *q, unsigned char *pos)
                 /* open the current file for reading */
                 if ((fd = open(f->path, OPENFLAGS)) == -1) {
                         fprintf(stderr, "Error opening '%s' for reading: %s\n",
-                                        f->path, strerror(errno));
+                                f->path, strerror(errno));
                         exit(EXIT_FAILURE);
                 }
 
@@ -237,7 +237,7 @@ static void read_files(metafile_t *m, queue_t *q, unsigned char *pos)
 
                         if (d < 0) {
                                 fprintf(stderr, "Error reading from '%s': %s\n",
-                                                f->path, strerror(errno));
+                                        f->path, strerror(errno));
                                 exit(EXIT_FAILURE);
                         }
 
@@ -262,7 +262,7 @@ static void read_files(metafile_t *m, queue_t *q, unsigned char *pos)
                 /* now close the file */
                 if (close(fd)) {
                         fprintf(stderr, "Error closing '%s': %s\n",
-                                        f->path, strerror(errno));
+                                f->path, strerror(errno));
                         exit(EXIT_FAILURE);
                 }
         }
@@ -279,8 +279,8 @@ static void read_files(metafile_t *m, queue_t *q, unsigned char *pos)
         counter += r;
         if (counter != m->size) {
                 fprintf(stderr, "Counted %" PRId64 " bytes, "
-                                "but hashed %" PRId64 " bytes. "
-                                "Something is wrong...\n", m->size, counter);
+                                                   "but hashed %" PRId64 " bytes. "
+                                                                         "Something is wrong...\n", m->size, counter);
                 exit(EXIT_FAILURE);
         }
 #endif
@@ -317,7 +317,7 @@ EXPORT unsigned char *make_hash(metafile_t *m)
                 err = pthread_create(&workers[i], NULL, worker, &q);
                 if (err) {
                         fprintf(stderr, "Error creating thread: %s\n",
-                                        strerror(err));
+                                strerror(err));
                         exit(EXIT_FAILURE);
                 }
         }
@@ -326,7 +326,7 @@ EXPORT unsigned char *make_hash(metafile_t *m)
         err = pthread_create(&print_progress_thread, NULL, print_progress, &q);
         if (err) {
                 fprintf(stderr, "Error creating thread: %s\n",
-                                strerror(err));
+                        strerror(err));
                 exit(EXIT_FAILURE);
         }
 
@@ -337,7 +337,7 @@ EXPORT unsigned char *make_hash(metafile_t *m)
         err = pthread_cancel(print_progress_thread);
         if (err) {
                 fprintf(stderr, "Error cancelling thread: %s\n",
-                                strerror(err));
+                        strerror(err));
                 exit(EXIT_FAILURE);
         }
 
@@ -349,7 +349,7 @@ EXPORT unsigned char *make_hash(metafile_t *m)
                 err = pthread_join(workers[i], NULL);
                 if (err) {
                         fprintf(stderr, "Error joining thread: %s\n",
-                                        strerror(err));
+                                strerror(err));
                         exit(EXIT_FAILURE);
                 }
         }
@@ -360,7 +360,7 @@ EXPORT unsigned char *make_hash(metafile_t *m)
         err = pthread_join(print_progress_thread, NULL);
         if (err) {
                 fprintf(stderr, "Error joining thread: %s\n",
-                                strerror(err));
+                        strerror(err));
                 exit(EXIT_FAILURE);
         }
 

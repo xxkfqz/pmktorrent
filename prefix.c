@@ -49,7 +49,7 @@ int main()
         prefix[sizeof(long int)] = "l";
 
 #ifdef DEBUG
-#define xstr(s) str(s)
+        #define xstr(s) str(s)
 #define str(s) #s
 
 #ifdef _LARGEFILE_SOURCE

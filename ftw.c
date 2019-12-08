@@ -47,7 +47,7 @@ struct dir_state {
 };
 
 static struct dir_state *dir_state_new(struct dir_state *prev,
-                struct dir_state *next)
+                                       struct dir_state *next)
 {
         struct dir_state *ds = malloc(sizeof(struct dir_state));
 
@@ -63,12 +63,12 @@ static struct dir_state *dir_state_new(struct dir_state *prev,
 }
 
 static unsigned int dir_state_open(struct dir_state *ds, const char *name,
-                size_t length)
+                                   size_t length)
 {
         ds->dir = opendir(name);
         if (ds->dir == NULL) {
                 fprintf(stderr, "Error opening '%s': %s\n",
-                                name, strerror(errno));
+                        name, strerror(errno));
                 return 1;
         }
 
@@ -83,7 +83,7 @@ static unsigned int dir_state_reopen(struct dir_state *ds, char *name)
         ds->dir = opendir(name);
         if (ds->dir == NULL) {
                 fprintf(stderr, "Error opening '%s': %s\n",
-                                name, strerror(errno));
+                        name, strerror(errno));
                 return 1;
         }
 
@@ -99,13 +99,13 @@ static unsigned int dir_state_close(struct dir_state *ds)
         ds->offset = telldir(ds->dir);
         if (ds->offset < 0) {
                 fprintf(stderr, "Error getting dir offset: %s\n",
-                                strerror(errno));
+                        strerror(errno));
                 return 1;
         }
 
         if (closedir(ds->dir)) {
                 fprintf(stderr, "Error closing directory: %s\n",
-                                strerror(errno));
+                        strerror(errno));
                 return 1;
         }
 
@@ -132,7 +132,7 @@ static unsigned int cleanup(struct dir_state *ds, char *path, int ret)
 }
 
 EXPORT int file_tree_walk(const char *dirname, unsigned int nfds,
-                file_tree_walk_cb callback, void *data)
+                          file_tree_walk_cb callback, void *data)
 {
         size_t path_size = 256;
         char *path;
@@ -195,9 +195,9 @@ EXPORT int file_tree_walk(const char *dirname, unsigned int nfds,
                         int r;
 
                         if (de->d_name[0] == '.'
-                                        && (de->d_name[1] == '\0'
-                                        || (de->d_name[1] == '.'
-                                        && de->d_name[2] == '\0'))) {
+                            && (de->d_name[1] == '\0'
+                                || (de->d_name[1] == '.'
+                                    && de->d_name[2] == '\0'))) {
                                 continue;
                         }
 
@@ -223,7 +223,7 @@ EXPORT int file_tree_walk(const char *dirname, unsigned int nfds,
 
                         if (stat(path, &sbuf)) {
                                 fprintf(stderr, "Error stat'ing '%s': %s\n",
-                                                path, strerror(errno));
+                                        path, strerror(errno));
                                 return cleanup(ds, path, -1);
                         }
 
@@ -233,7 +233,7 @@ EXPORT int file_tree_walk(const char *dirname, unsigned int nfds,
 
                         if (S_ISDIR(sbuf.st_mode)) {
                                 if (ds->next == NULL &&
-                                        (ds->next = dir_state_new(ds, NULL)) == NULL)
+                                    (ds->next = dir_state_new(ds, NULL)) == NULL)
                                         return cleanup(ds, path, -1);
 
                                 ds = ds->next;

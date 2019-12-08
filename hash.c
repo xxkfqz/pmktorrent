@@ -91,7 +91,7 @@ EXPORT unsigned char *make_hash(metafile_t *m)
                 /* open the current file for reading */
                 if ((fd = open(f->path, OPENFLAGS)) == -1) {
                         fprintf(stderr, "Error opening '%s' for reading: %s\n",
-                                        f->path, strerror(errno));
+                                f->path, strerror(errno));
                         exit(EXIT_FAILURE);
                 }
                 fprintf(stderr, "Hashing %s.\n", f->path);
@@ -105,7 +105,7 @@ EXPORT unsigned char *make_hash(metafile_t *m)
 
                         if (d < 0) {
                                 fprintf(stderr, "Error reading from '%s': %s\n",
-                                                f->path, strerror(errno));
+                                        f->path, strerror(errno));
                                 exit(EXIT_FAILURE);
                         }
 
@@ -129,7 +129,7 @@ EXPORT unsigned char *make_hash(metafile_t *m)
                 /* now close the file */
                 if (close(fd)) {
                         fprintf(stderr, "Error closing '%s': %s\n",
-                                        f->path, strerror(errno));
+                                f->path, strerror(errno));
                         exit(EXIT_FAILURE);
                 }
         }
@@ -145,8 +145,8 @@ EXPORT unsigned char *make_hash(metafile_t *m)
         counter += r;
         if (counter != m->size) {
                 fprintf(stderr, "Counted %" PRId64 " bytes, "
-                                "but hashed %" PRId64 " bytes. "
-                                "Something is wrong...\n", m->size, counter);
+                                                   "but hashed %" PRId64 " bytes. "
+                                                                         "Something is wrong...\n", m->size, counter);
                 exit(EXIT_FAILURE);
         }
 #endif

@@ -145,7 +145,7 @@ static void set_absolute_file_path(metafile_t *m)
         if (m->metainfo_file_path == NULL) {
                 /* append <torrent name>.torrent to the working dir */
                 string =
-                    realloc(string, length + strlen(m->torrent_name) + 10);
+                        realloc(string, length + strlen(m->torrent_name) + 10);
                 if (string == NULL) {
                         fprintf(stderr, "Out of memory.\n");
                         exit(EXIT_FAILURE);
@@ -154,8 +154,8 @@ static void set_absolute_file_path(metafile_t *m)
         } else {
                 /* otherwise append the torrent path to the working dir */
                 string =
-                    realloc(string,
-                            length + strlen(m->metainfo_file_path) + 2);
+                        realloc(string,
+                                length + strlen(m->metainfo_file_path) + 2);
                 if (string == NULL) {
                         fprintf(stderr, "Out of memory.\n");
                         exit(EXIT_FAILURE);
@@ -230,7 +230,7 @@ static int is_dir(metafile_t *m, char *target)
         /* stat the target */
         if (stat(target, &s)) {
                 fprintf(stderr, "Error stat'ing '%s': %s\n",
-                                target, strerror(errno));
+                        target, strerror(errno));
                 exit(EXIT_FAILURE);
         }
 
@@ -242,7 +242,7 @@ static int is_dir(metafile_t *m, char *target)
         if (!S_ISREG(s.st_mode) && !S_ISBLK(s.st_mode)) {
                 fprintf(stderr,
                         "'%s' is neither a directory nor regular file nor a block device.\n",
-                                target);
+                        target);
                 exit(EXIT_FAILURE);
         }
 
@@ -312,7 +312,7 @@ static int process_node(const char *path, const struct stat *sb, void *data)
         /* create a new file list node for the file */
         new_node = malloc(sizeof(flist_t));
         if (new_node == NULL ||
-                        (new_node->path = strdup(path)) == NULL) {
+            (new_node->path = strdup(path)) == NULL) {
                 fprintf(stderr, "Out of memory.\n");
                 return -1;
         }
@@ -381,10 +381,10 @@ static int sort_file_list(void *data)
 static void print_help()
 {
         printf(
-          "Usage: " PROGRAM " [OPTIONS] <target directory, block device or filename>\n\n"
-          "Options:\n"
-#ifdef USE_LONG_OPTIONS
-          "  -a, --announce=<url>[,<url>]* - specify the full announce URLs\n"
+                "Usage: " PROGRAM " [OPTIONS] <target directory, block device or filename>\n\n"
+                                  "Options:\n"
+                                  #ifdef USE_LONG_OPTIONS
+                                  "  -a, --announce=<url>[,<url>]* - specify the full announce URLs\n"
           "                                  additional -a adds backup trackers\n"
           "  -A, --announce-file=<file>    - specify a file from which a full announce URL\n"
           "                                  is read\n"
@@ -409,37 +409,37 @@ static void print_help()
           "  -v, --verbose                 - be verbose\n"
           "  -w, --web-seed=<url>[,<url>]* - add web seed URLs\n"
           "                                  additional -w adds more URLs\n"
-#else
-          "  -a <url>[,<url>]* - specify the full announce URLs\n"
-          "                      additional -a adds backup trackers\n"
-          "  -A <file>         - specify a file from which a full announce URL is read\n"
-          "  -c <comment>      - add a comment to the metainfo\n"
-          "  -d                - don't write the creation date\n"
-          "  -h                - show this help screen\n"
-          "  -l <n>            - set the piece length to 2^n bytes,\n"
-          "                      default is 18, that is 2^18 = 256kb\n"
-          "  -n <name>         - set the name of the torrent,\n"
-          "                      default is the basename of the target\n"
-          "  -o <filename>     - set the path and filename of the created file\n"
-          "                      default is <name>.torrent\n"
-          "  -p                - set the private flag\n"
-          "  -s                - add source string embedded in infohash\n"
-          "  -b <name>         - set the name of the program that created the file aka\n"
-          "                      \"Created by\" field.\n"
-          "                      default: \"pmktorrent "VERSION"\"\n"
-#ifdef USE_PTHREADS
-          "  -t <n>            - use <n> threads for calculating hashes\n"
+                                  #else
+                                  "  -a <url>[,<url>]* - specify the full announce URLs\n"
+                                  "                      additional -a adds backup trackers\n"
+                                  "  -A <file>         - specify a file from which a full announce URL is read\n"
+                                  "  -c <comment>      - add a comment to the metainfo\n"
+                                  "  -d                - don't write the creation date\n"
+                                  "  -h                - show this help screen\n"
+                                  "  -l <n>            - set the piece length to 2^n bytes,\n"
+                                  "                      default is 18, that is 2^18 = 256kb\n"
+                                  "  -n <name>         - set the name of the torrent,\n"
+                                  "                      default is the basename of the target\n"
+                                  "  -o <filename>     - set the path and filename of the created file\n"
+                                  "                      default is <name>.torrent\n"
+                                  "  -p                - set the private flag\n"
+                                  "  -s                - add source string embedded in infohash\n"
+                                  "  -b <name>         - set the name of the program that created the file aka\n"
+                                  "                      \"Created by\" field.\n"
+                                  "                      default: \"pmktorrent "VERSION"\"\n"
+                                                                                       #ifdef USE_PTHREADS
+                                                                                       "  -t <n>            - use <n> threads for calculating hashes\n"
           "                      default is the number of CPU cores\n"
-#endif
-          "  -v                - be verbose\n"
-          "  -w <url>[,<url>]* - add web seed URLs\n"
-          "                      additional -w adds more URLs\n"
-#endif
-          "\nCopyright (C) 2007, 2009 Emil Renner Berthing\n"
-          "Edited 2019 xxkfqz <xxkfqz@gmail.com>\n\n"
-          "Please send bug reports, patches, feature requests, praise and\n"
-          "general gossip about the program to: "
-          "https://github.com/xxkfqz/pmktorrent\n");
+                                                                                       #endif
+                                                                                       "  -v                - be verbose\n"
+                                                                                       "  -w <url>[,<url>]* - add web seed URLs\n"
+                                                                                       "                      additional -w adds more URLs\n"
+                                                                                       #endif
+                                                                                       "\nCopyright (C) 2007, 2009 Emil Renner Berthing\n"
+                                                                                       "Edited 2019 xxkfqz <xxkfqz@gmail.com>\n\n"
+                                                                                       "Please send bug reports, patches, feature requests, praise and\n"
+                                                                                       "general gossip about the program to: "
+                                                                                       "https://github.com/xxkfqz/pmktorrent\n");
 }
 
 /*
@@ -490,15 +490,15 @@ static void dump_options(metafile_t *m)
                 "  Torrent name:  %s\n"
                 "  Metafile:      %s\n"
                 "  Piece length:  %u\n"
+                #ifdef USE_PTHREADS
+                "  Threads:       %u\n"
+                #endif
+                "  Be verbose:    yes\n",
+                m->torrent_name, m->metainfo_file_path, m->piece_length
 #ifdef USE_PTHREADS
-               "  Threads:       %u\n"
+                ,m->threads
 #endif
-               "  Be verbose:    yes\n",
-               m->torrent_name, m->metainfo_file_path, m->piece_length
-#ifdef USE_PTHREADS
-               ,m->threads
-#endif
-               );
+        );
 
         fprintf(stderr, "  Write date:    ");
         if (m->no_creation_date)
@@ -568,115 +568,115 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 #endif
 #undef OPT_STRING
                 switch (c) {
-                case 'A':
-                {
-                        free(m->announce_from_file);
-                        FILE* announce_file = fopen(optarg, "r");
-                        if (announce_file == NULL) {
-                                fprintf(stderr, "Couldn't open file for reading.\n");
-                                exit(EXIT_FAILURE);
-                        }
-                        long filesize;
-                        int err = get_filesize(announce_file, &filesize);
-                        if (err != 0) {
-                                fprintf(stderr, "Couldn't determine the filesize successfully.\n");
-                                exit(EXIT_FAILURE);
-                        }
-                        if (filesize > MAX_ANNOUNCE_FILE_SIZE) {
-                                fprintf(stderr, "The file is bigger than the maximum allowed size which is %d MiB.\n", MAX_ANNOUNCE_FILE_SIZE / 1024);
-                                fprintf(stderr, "Probably you've chosen a wrong file for the announce URL.\n");
-                                exit(EXIT_FAILURE);
-                        }
-                        char* announce = malloc(filesize + 1);
-                        if (announce == NULL) {
-                                fprintf(stderr, "Couldn't allocate the buffer for the file.\n");
-                                exit(EXIT_FAILURE);
-                        }
-                        size_t bytes_read = fread(announce, 1, MAX_ANNOUNCE_FILE_SIZE, announce_file);
-                        if (ferror(announce_file) != 0) {
-                                fprintf(stderr, "An error occured reading the file.\n");
-                                exit(EXIT_FAILURE);
-                        }
-                        announce[bytes_read] = '\0';
-                        trim_right(announce, announce + bytes_read);
+                        case 'A':
+                        {
+                                free(m->announce_from_file);
+                                FILE* announce_file = fopen(optarg, "r");
+                                if (announce_file == NULL) {
+                                        fprintf(stderr, "Couldn't open file for reading.\n");
+                                        exit(EXIT_FAILURE);
+                                }
+                                long filesize;
+                                int err = get_filesize(announce_file, &filesize);
+                                if (err != 0) {
+                                        fprintf(stderr, "Couldn't determine the filesize successfully.\n");
+                                        exit(EXIT_FAILURE);
+                                }
+                                if (filesize > MAX_ANNOUNCE_FILE_SIZE) {
+                                        fprintf(stderr, "The file is bigger than the maximum allowed size which is %d MiB.\n", MAX_ANNOUNCE_FILE_SIZE / 1024);
+                                        fprintf(stderr, "Probably you've chosen a wrong file for the announce URL.\n");
+                                        exit(EXIT_FAILURE);
+                                }
+                                char* announce = malloc(filesize + 1);
+                                if (announce == NULL) {
+                                        fprintf(stderr, "Couldn't allocate the buffer for the file.\n");
+                                        exit(EXIT_FAILURE);
+                                }
+                                size_t bytes_read = fread(announce, 1, MAX_ANNOUNCE_FILE_SIZE, announce_file);
+                                if (ferror(announce_file) != 0) {
+                                        fprintf(stderr, "An error occured reading the file.\n");
+                                        exit(EXIT_FAILURE);
+                                }
+                                announce[bytes_read] = '\0';
+                                trim_right(announce, announce + bytes_read);
 
-                        fclose(announce_file);
-                        if (announce_last == NULL) {
-                                m->announce_list = announce_last = malloc(sizeof(llist_t));
-                                announce_last->l = get_slist(announce, '\n', 0);
-                        } else {
-                                fprintf(stderr, "The announce file options must occur uniquely and it requires no announce set with -a.\n");
-                                exit(EXIT_FAILURE);
+                                fclose(announce_file);
+                                if (announce_last == NULL) {
+                                        m->announce_list = announce_last = malloc(sizeof(llist_t));
+                                        announce_last->l = get_slist(announce, '\n', 0);
+                                } else {
+                                        fprintf(stderr, "The announce file options must occur uniquely and it requires no announce set with -a.\n");
+                                        exit(EXIT_FAILURE);
+                                }
+                                m->announce_from_file = announce;
+                                break;
                         }
-                        m->announce_from_file = announce;
-                        break;
-                }
-                case 'a':
-                        if (announce_last == NULL) {
-                                m->announce_list = announce_last =
-                                        malloc(sizeof(llist_t));
-                        } else {
-                                announce_last->next =
-                                        malloc(sizeof(llist_t));
-                                announce_last = announce_last->next;
+                        case 'a':
+                                if (announce_last == NULL) {
+                                        m->announce_list = announce_last =
+                                                malloc(sizeof(llist_t));
+                                } else {
+                                        announce_last->next =
+                                                malloc(sizeof(llist_t));
+                                        announce_last = announce_last->next;
 
-                        }
-                        if (announce_last == NULL) {
-                                fprintf(stderr, "Out of memory.\n");
-                                exit(EXIT_FAILURE);
-                        }
-                        announce_last->l = get_slist(optarg, ',', false);
-                        break;
-                case 'c':
-                        m->comment = optarg;
-                        break;
-                case 'd':
-                        m->no_creation_date = 1;
-                        break;
-                case 'h':
-                        print_help();
-                        exit(EXIT_SUCCESS);
-                case 'l':
-                        m->piece_length = atoi(optarg);
-                        break;
-                case 'n':
-                        m->torrent_name = optarg;
-                        break;
-                case 'o':
-                        m->metainfo_file_path = optarg;
-                        break;
-                case 'p':
-                        m->private = 1;
-                        break;
-                case 's':
-                        m->source = optarg;
-                        break;
-                case 'b':
-                        m->created_by = optarg;
-                        break;
+                                }
+                                if (announce_last == NULL) {
+                                        fprintf(stderr, "Out of memory.\n");
+                                        exit(EXIT_FAILURE);
+                                }
+                                announce_last->l = get_slist(optarg, ',', false);
+                                break;
+                        case 'c':
+                                m->comment = optarg;
+                                break;
+                        case 'd':
+                                m->no_creation_date = 1;
+                                break;
+                        case 'h':
+                                print_help();
+                                exit(EXIT_SUCCESS);
+                        case 'l':
+                                m->piece_length = atoi(optarg);
+                                break;
+                        case 'n':
+                                m->torrent_name = optarg;
+                                break;
+                        case 'o':
+                                m->metainfo_file_path = optarg;
+                                break;
+                        case 'p':
+                                m->private = 1;
+                                break;
+                        case 's':
+                                m->source = optarg;
+                                break;
+                        case 'b':
+                                m->created_by = optarg;
+                                break;
 #ifdef USE_PTHREADS
-                case 't':
+                        case 't':
                         m->threads = atoi(optarg);
                         break;
 #endif
-                case 'v':
-                        m->verbose = 1;
-                        break;
-                case 'w':
-                        if (web_seed_last == NULL) {
-                                m->web_seed_list = web_seed_last =
-                                        get_slist(optarg, ',', false);
-                        } else {
-                                web_seed_last->next =
-                                        get_slist(optarg, ',', false);
-                                web_seed_last = web_seed_last->next;
-                        }
-                        while (web_seed_last->next)
-                                web_seed_last = web_seed_last->next;
-                        break;
-                case '?':
-                        fprintf(stderr, "Use -h for help.\n");
-                        exit(EXIT_FAILURE);
+                        case 'v':
+                                m->verbose = 1;
+                                break;
+                        case 'w':
+                                if (web_seed_last == NULL) {
+                                        m->web_seed_list = web_seed_last =
+                                                get_slist(optarg, ',', false);
+                                } else {
+                                        web_seed_last->next =
+                                                get_slist(optarg, ',', false);
+                                        web_seed_last = web_seed_last->next;
+                                }
+                                while (web_seed_last->next)
+                                        web_seed_last = web_seed_last->next;
+                                break;
+                        case '?':
+                                fprintf(stderr, "Use -h for help.\n");
+                                exit(EXIT_FAILURE);
                 }
         }
 
@@ -696,7 +696,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
         /* ..and a file or directory from which to create the torrent */
         if (optind >= argc) {
                 fprintf(stderr, "Missing operand. Try '-h' or --help', "
-                        "for more information\n");
+                                "for more information\n");
                 exit(EXIT_FAILURE);
         }
 
@@ -739,7 +739,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                 /* change to the specified directory */
                 if (chdir(argv[optind])) {
                         fprintf(stderr, "Error changing directory to '%s': %s\n",
-                                        argv[optind], strerror(errno));
+                                argv[optind], strerror(errno));
                         exit(EXIT_FAILURE);
                 }
 
@@ -758,6 +758,6 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
         if (m->verbose)
                 fprintf(stderr,
                         "\n%" PRIoff " bytes in all.\n"
-                        "That's %u pieces of %u bytes each.\n\n",
-                        m->size, m->pieces, m->piece_length);
+                                     "That's %u pieces of %u bytes each.\n\n",
+                m->size, m->pieces, m->piece_length);
 }

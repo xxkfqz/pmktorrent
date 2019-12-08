@@ -49,7 +49,7 @@ static void write_announce_list(FILE *f, llist_t *list)
                 fprintf(f, "l");
                 for (l = list->l; l; l = l->next)
                         fprintf(f, "%lu:%s",
-                                        (unsigned long)strlen(l->s), l->s);
+                                (unsigned long)strlen(l->s), l->s);
                 fprintf(f, "e");
         }
         fprintf(f, "e");
@@ -137,8 +137,8 @@ EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
         /* add the comment if one is specified */
         if (m->comment != NULL)
                 fprintf(f, "7:comment%lu:%s",
-                                (unsigned long)strlen(m->comment),
-                                m->comment);
+                        (unsigned long)strlen(m->comment),
+                        m->comment);
         /* I made this! */
         fprintf(f, "10:created by%lu:%s", (unsigned long)strlen(m->created_by),
                 m->created_by);
@@ -155,7 +155,7 @@ EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
         if (!m->target_is_directory)
                 fprintf(f, "6:lengthi%" PRIoff "e", m->file_list->size);
         else
-                write_file_list(f, m->file_list);
+        write_file_list(f, m->file_list);
 
         /* the info section also contains the name of the torrent,
            the piece length and the hash string */
@@ -178,8 +178,8 @@ EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
         if (m->web_seed_list != NULL) {
                 if (m->web_seed_list->next == NULL)
                         fprintf(f, "8:url-list%lu:%s",
-                                        (unsigned long)strlen(m->web_seed_list->s),
-                                        m->web_seed_list->s);
+                                (unsigned long)strlen(m->web_seed_list->s),
+                                m->web_seed_list->s);
                 else
                         write_web_seed_list(f, m->web_seed_list);
         }
