@@ -382,64 +382,64 @@ static void print_help()
 {
         printf(
                 "Usage: " PROGRAM " [OPTIONS] <target directory, block device or filename>\n\n"
-                                  "Options:\n"
-                                  #ifdef USE_LONG_OPTIONS
-                                  "  -a, --announce=<url>[,<url>]* - specify the full announce URLs\n"
-          "                                  additional -a adds backup trackers\n"
-          "  -A, --announce-file=<file>    - specify a file from which a full announce URL\n"
-          "                                  is read\n"
-          "  -c, --comment=<comment>       - add a comment to the metainfo\n"
-          "  -d, --no-date                 - don't write the creation date\n"
-          "  -h, --help                    - show this help screen\n"
-          "  -l, --piece-length=<n>        - set the piece length to 2^n bytes,\n"
-          "                                  default is 18, that is 2^18 = 256kb\n"
-          "  -n, --name=<name>             - set the name of the torrent\n"
-          "                                  default is the basename of the target\n"
-          "  -o, --output=<filename>       - set the path and filename of the created file\n"
-          "                                  default is <name>.torrent\n"
-          "  -p, --private                 - set the private flag\n"
-          "  -s, --source=<source>         - add source string embedded in infohash\n"
-          "  -b, --created-by=<name>       - set the name of the program that created the\n"
-          "                                  file aka \"Created by\" field.\n"
-          "                                  default: \"" PROGRAM" "VERSION"\"\n"
-#ifdef USE_PTHREADS
-          "  -t, --threads=<n>             - use <n> threads for calculating hashes\n"
-          "                                  default is the number of CPU cores\n"
-#endif
-          "  -v, --verbose                 - be verbose\n"
-          "  -w, --web-seed=<url>[,<url>]* - add web seed URLs\n"
-          "                                  additional -w adds more URLs\n"
-                                  #else
-                                  "  -a <url>[,<url>]* - specify the full announce URLs\n"
-                                  "                      additional -a adds backup trackers\n"
-                                  "  -A <file>         - specify a file from which a full announce URL is read\n"
-                                  "  -c <comment>      - add a comment to the metainfo\n"
-                                  "  -d                - don't write the creation date\n"
-                                  "  -h                - show this help screen\n"
-                                  "  -l <n>            - set the piece length to 2^n bytes,\n"
-                                  "                      default is 18, that is 2^18 = 256kb\n"
-                                  "  -n <name>         - set the name of the torrent,\n"
-                                  "                      default is the basename of the target\n"
-                                  "  -o <filename>     - set the path and filename of the created file\n"
-                                  "                      default is <name>.torrent\n"
-                                  "  -p                - set the private flag\n"
-                                  "  -s                - add source string embedded in infohash\n"
-                                  "  -b <name>         - set the name of the program that created the file aka\n"
-                                  "                      \"Created by\" field.\n"
-                                  "                      default: \"pmktorrent "VERSION"\"\n"
-                                                                                       #ifdef USE_PTHREADS
-                                                                                       "  -t <n>            - use <n> threads for calculating hashes\n"
-          "                      default is the number of CPU cores\n"
-                                                                                       #endif
-                                                                                       "  -v                - be verbose\n"
-                                                                                       "  -w <url>[,<url>]* - add web seed URLs\n"
-                                                                                       "                      additional -w adds more URLs\n"
-                                                                                       #endif
-                                                                                       "\nCopyright (C) 2007, 2009 Emil Renner Berthing\n"
-                                                                                       "Edited 2019 xxkfqz <xxkfqz@gmail.com>\n\n"
-                                                                                       "Please send bug reports, patches, feature requests, praise and\n"
-                                                                                       "general gossip about the program to: "
-                                                                                       "https://github.com/xxkfqz/pmktorrent\n");
+                "Options:\n"
+                #ifdef USE_LONG_OPTIONS
+                "  -a, --announce=<url>[,<url>]* - specify the full announce URLs\n"
+                "                                  additional -a adds backup trackers\n"
+                "  -A, --announce-file=<file>    - specify a file from which a full announce URL\n"
+                "                                  is read\n"
+                "  -c, --comment=<comment>       - add a comment to the metainfo\n"
+                "  -d, --no-date                 - don't write the creation date\n"
+                "  -h, --help                    - show this help screen\n"
+                "  -l, --piece-length=<n>        - set the piece length to 2^n bytes,\n"
+                "                                  default is 18, that is 2^18 = 256kb\n"
+                "  -n, --name=<name>             - set the name of the torrent\n"
+                "                                  default is the basename of the target\n"
+                "  -o, --output=<filename>       - set the path and filename of the created file\n"
+                "                                  default is <name>.torrent\n"
+                "  -p, --private                 - set the private flag\n"
+                "  -s, --source=<source>         - add source string embedded in infohash\n"
+                "  -b, --created-by=<name>       - set the name of the program that created the\n"
+                "                                  file aka \"Created by\" field (optional)\n"
+                "                                  default: \"" PROGRAM" "VERSION"\"\n"
+                #ifdef USE_PTHREADS
+                "  -t, --threads=<n>             - use <n> threads for calculating hashes\n"
+                "                                  default is the number of CPU cores\n"
+                #endif /* USE_PTHREADS */
+                "  -v, --verbose                 - be verbose\n"
+                "  -w, --web-seed=<url>[,<url>]* - add web seed URLs\n"
+                "                                  additional -w adds more URLs\n"
+                #else /* USE_LONG_OPTIONS */
+                "  -a <url>[,<url>]* - specify the full announce URLs\n"
+                "                      additional -a adds backup trackers\n"
+                "  -A <file>         - specify a file from which a full announce URL is read\n"
+                "  -c <comment>      - add a comment to the metainfo\n"
+                "  -d                - don't write the creation date\n"
+                "  -h                - show this help screen\n"
+                "  -l <n>            - set the piece length to 2^n bytes,\n"
+                "                      default is 18, that is 2^18 = 256kb\n"
+                "  -n <name>         - set the name of the torrent,\n"
+                "                      default is the basename of the target\n"
+                "  -o <filename>     - set the path and filename of the created file\n"
+                "                      default is <name>.torrent\n"
+                "  -p                - set the private flag\n"
+                "  -s                - add source string embedded in infohash\n"
+                "  -b <name>         - set the name of the program that created the file aka\n"
+                "                      \"Created by\" field (optional)\n"
+                "                      default: \""PROGRAM " "VERSION"\"\n"
+                #ifdef USE_PTHREADS
+                "  -t <n>            - use <n> threads for calculating hashes\n"
+                "                      default is the number of CPU cores\n"
+                #endif /* USE_PTHREADS */
+                "  -v                - be verbose\n"
+                "  -w <url>[,<url>]* - add web seed URLs\n"
+                "                      additional -w adds more URLs\n"
+                #endif /* USE_LONG_OPTIONS */
+                "\nCopyright (C) 2007, 2009 Emil Renner Berthing\n"
+                "Edited 2019 xxkfqz <xxkfqz@gmail.com>\n\n"
+                "Please send bug reports, patches, feature requests, praise and\n"
+                "general gossip about the program to: "
+                "https://github.com/xxkfqz/pmktorrent\n");
 }
 
 /*
@@ -559,9 +559,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 
 /* now parse the command line options given */
 #ifdef USE_PTHREADS
-#define OPT_STRING "A:a:c:dhl:n:o:ps:b:t:vw:"
+#define OPT_STRING "A:a:c:dhl:n:o:ps:b::t:vw:"
 #else
-#define OPT_STRING "A:a:c:dhl:n:o:ps:b:vw:"
+#define OPT_STRING "A:a:c:dhl:n:o:ps:b::vw:"
 #endif
 #ifdef USE_LONG_OPTIONS
         while ((c = getopt_long(argc, argv, OPT_STRING,
@@ -682,6 +682,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                                 exit(EXIT_FAILURE);
                 }
         }
+
+        if (m->created_by == NULL)
+                m->created_by = PROGRAM " " VERSION;
 
         /* set the correct piece length.
            default is 2^18 = 256kb. */
