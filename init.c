@@ -314,6 +314,7 @@ static int process_node(const char *path, const struct stat *sb, void *data)
         if (new_node == NULL ||
             (new_node->path = strdup(path)) == NULL) {
                 fprintf(stderr, "Out of memory.\n");
+                free(new_node->path);
                 return -1;
         }
         new_node->size = sb->st_size;
@@ -659,8 +660,8 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                                 break;
 #ifdef USE_PTHREADS
                         case 't':
-                        m->threads = atoi(optarg);
-                        break;
+                                m->threads = atoi(optarg);
+                                break;
 #endif
                         case 'v':
                                 m->verbose = 1;

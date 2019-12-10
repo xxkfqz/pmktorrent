@@ -182,6 +182,8 @@ int main(int argc, char *argv[])
         /* calculate hash string and write the metainfo to file */
         write_metainfo(file, &m, make_hash(&m));
 
+        free(m.file_list);
+
         /* close the file stream */
         close_file(file);
 

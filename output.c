@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <stdio.h>        /* printf() etc. */
 #include <string.h>       /* strlen() etc. */
 #include <time.h>         /* time() */
+#include <stdlib.h>       /* free() */
 #ifdef USE_OPENSSL
 #include <openssl/sha.h>  /* SHA_DIGEST_LENGTH */
 #else
@@ -203,4 +204,5 @@ EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
         /* let the user know we're done already */
         fprintf(stderr, "done.\n");
         fflush(stdout);
+        free(hash_string);
 }
