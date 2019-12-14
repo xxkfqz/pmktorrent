@@ -310,9 +310,9 @@ static int process_node(const char *path, const struct stat *sb, void *data)
         p = &m->file_list;
 
         /* create a new file list node for the file */
+        /* TODO: fix memory leaks on 'malloc' and 'strdup' */
         new_node = malloc(sizeof(flist_t));
-        if (new_node == NULL ||
-            (new_node->path = strdup(path)) == NULL) {
+        if (new_node == NULL || (new_node->path = strdup(path)) == NULL) {
                 fprintf(stderr, "Out of memory.\n");
                 free(new_node->path);
                 return -1;
