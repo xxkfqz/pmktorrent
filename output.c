@@ -123,14 +123,18 @@ static void write_web_seed_list(FILE *f, slist_t *list)
  */
 EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
 {
-        fprintf(stderr, "Total number of files: %" PRIu64 "\n", m->file_count);
-        if (m->file_count >= FILES_NUMBER_WARNING)
-                fprintf(stderr,
-                        "Warning: the current number of files can cause"
-                        "problems on torrent clients");
+        if (!m->quiet)
+        {
+                fprintf(stderr, "Total number of files: %" PRIu64 "\n",
+                        m->file_count);
+                if(m->file_count >= FILES_NUMBER_WARNING)
+                        fprintf(stderr,
+                                "Warning: the current number of files can cause"
+                                "problems on torrent clients");
 
-        /* let the user know we've started writing the metainfo file */
-        fprintf(stderr, "Writing metainfo file... ");
+                /* let the user know we've started writing the metainfo file */
+                fprintf(stderr, "Writing metainfo file... ");
+        }
         fflush(stdout);
 
         /* every metainfo file is one big dictonary */
@@ -202,7 +206,8 @@ EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
         fprintf(f, "e");
 
         /* let the user know we're done already */
-        fprintf(stderr, "done.\n");
+        if (!m->quiet)
+                fprintf(stderr, "done.\n");
         fflush(stdout);
         free(hash_string);
 }

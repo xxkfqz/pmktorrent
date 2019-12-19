@@ -296,7 +296,9 @@ static int process_node(const char *path, const struct stat *sb, void *data)
         /* now path should be readable otherwise
          * display a warning and skip it */
         if (access(path, R_OK)) {
-                fprintf(stderr, "Warning: Cannot read '%s', skipping.\n", path);
+                if (!m->quiet)
+                        fprintf(stderr,
+                                "Warning: Cannot read '%s', skipping.\n", path);
                 return 0;
         }
 
@@ -408,6 +410,7 @@ static void print_help()
                 "                                  default is the number of CPU cores\n"
                 #endif /* USE_PTHREADS */
                 "  -v, --verbose                 - be verbose\n"
+                "  -q, --quiet                   - be quiet (do not print anything)\n"
                 "  -w, --web-seed=<url>[,<url>]* - add web seed URLs\n"
                 "                                  additional -w adds more URLs\n"
                 #else /* USE_LONG_OPTIONS */
@@ -433,6 +436,7 @@ static void print_help()
                 "                      default is the number of CPU cores\n"
                 #endif /* USE_PTHREADS */
                 "  -v                - be verbose\n"
+                "  -q                - be quiet (do not print anything)\n"
                 "  -w <url>[,<url>]* - add web seed URLs\n"
                 "                      additional -w adds more URLs\n"
                 #endif /* USE_LONG_OPTIONS */
@@ -553,6 +557,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                 {"threads", 1, NULL, 't'},
 #endif
                 {"verbose", 0, NULL, 'v'},
+                {"quite", 0, NULL, 'q'},
                 {"web-seed", 1, NULL, 'w'},
                 {NULL, 0, NULL, 0}
         };
@@ -560,9 +565,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 
 /* now parse the command line options given */
 #ifdef USE_PTHREADS
-#define OPT_STRING "A:a:c:dhl:n:o:ps:b::t:vw:"
+#define OPT_STRING "A:a:c:dhl:n:o:ps:b::t:vqw:"
 #else
-#define OPT_STRING "A:a:c:dhl:n:o:ps:b::vw:"
+#define OPT_STRING "A:a:c:dhl:n:o:ps:b::vqw:"
 #endif
 #ifdef USE_LONG_OPTIONS
         while ((c = getopt_long(argc, argv, OPT_STRING,
@@ -666,6 +671,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                         case 'v':
                                 m->verbose = 1;
                                 break;
+                        case 'q':
+                                m->quiet = 1;
+                                break;
                         case 'w':
                                 if (web_seed_last == NULL) {
                                         m->web_seed_list = web_seed_last =
@@ -735,9 +743,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
         /* make sure m->metainfo_file_path is the absolute path to the file */
         set_absolute_file_path(m);
 
-        /* if we should be verbose print out all the options
-           as we have set them */
-        if (m->verbose)
+        /* if we should not be quiet print out all the options as we have set
+         * them */
+        if (!m->quiet)
                 dump_options(m);
 
         /* check if target is a directory or just a single file */
@@ -761,7 +769,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
            pieces = ceil( size / piece_length ) */
         m->pieces = (m->size + m->piece_length - 1) / m->piece_length;
 
-        /* now print the size and piece count if we should be verbose */
+        /* now print the size and piece count if we should not be quiet */
         if (m->verbose)
                 fprintf(stderr,
                         "\n%" PRIoff " bytes in all.\n"

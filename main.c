@@ -161,7 +161,9 @@ int main(int argc, char *argv[])
                 0,    /* private */
                 NULL, /* source string */
                 PROGRAM " " VERSION, /* created_by */
+                /* flags */
                 0,    /* verbose */
+                0,    /* quiet */
 #ifdef USE_PTHREADS
                 0,    /* threads, initialised by init() */
 #endif

@@ -1,5 +1,5 @@
-#ifndef _MKTORRENT_H
-#define _MKTORRENT_H
+#ifndef _PMKTORRENT_H
+#define _PMKTORRENT_H
 
 #include <stdint.h>
 
@@ -50,7 +50,9 @@ typedef struct {
         int private;               /* set the private flag */
         char *source;              /* set source for private trackers */
         char *created_by;          /* "Created by" field */
-        int verbose;               /* be verbose */
+        /* flags */
+        int verbose:1;             /* be verbose */
+        int quiet:1;               /* be quiet */
 #ifdef USE_PTHREADS
         unsigned int threads;      /* number of threads used for hashing */
 #endif
@@ -62,4 +64,4 @@ typedef struct {
         unsigned int pieces;       /* number of pieces */
 } metafile_t;
 
-#endif /* _MKTORRENT_H */
+#endif /* _PMKTORRENT_H */

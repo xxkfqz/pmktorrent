@@ -326,22 +326,31 @@ EXPORT unsigned char *make_hash(metafile_t *m)
         }
 
         /* now set off the progress printer */
-        err = pthread_create(&print_progress_thread, NULL, print_progress, &q);
-        if (err) {
-                fprintf(stderr, "Error creating thread: %s\n",
-                        strerror(err));
-                exit(EXIT_FAILURE);
+        if (!m->quiet)
+        {
+                err = pthread_create(&print_progress_thread, NULL,
+                                     print_progress, &q);
+                if(err)
+                {
+                        fprintf(stderr, "Error creating thread: %s\n",
+                                strerror(err));
+                        exit(EXIT_FAILURE);
+                }
         }
 
         /* read files and feed pieces to the workers */
         read_files(m, &q, hash_string);
 
         /* we're done so stop printing our progress. */
-        err = pthread_cancel(print_progress_thread);
-        if (err) {
-                fprintf(stderr, "Error cancelling thread: %s\n",
-                        strerror(err));
-                exit(EXIT_FAILURE);
+        if (!m->quiet)
+        {
+                err = pthread_cancel(print_progress_thread);
+                if(err)
+                {
+                        fprintf(stderr, "Error cancelling thread: %s\n",
+                                strerror(err));
+                        exit(EXIT_FAILURE);
+                }
         }
 
         /* inform workers we're done */
@@ -360,11 +369,15 @@ EXPORT unsigned char *make_hash(metafile_t *m)
         free(workers);
 
         /* the progress printer should be done by now too */
-        err = pthread_join(print_progress_thread, NULL);
-        if (err) {
-                fprintf(stderr, "Error joining thread: %s\n",
-                        strerror(err));
-                exit(EXIT_FAILURE);
+        if (!m->quiet)
+        {
+                err = pthread_join(print_progress_thread, NULL);
+                if(err)
+                {
+                        fprintf(stderr, "Error joining thread: %s\n",
+                                strerror(err));
+                        exit(EXIT_FAILURE);
+                }
         }
 
         /* destroy mutexes and condition variables */
@@ -377,8 +390,9 @@ EXPORT unsigned char *make_hash(metafile_t *m)
         free_buffers(&q);
 
         /* ok, let the user know we're done too */
-        fprintf(stderr, "\rHashed %u of %u pieces.\n",
-                q.pieces_hashed, q.pieces);
+        if (!m->quiet)
+                fprintf(stderr, "\rHashed %u of %u pieces.\n",
+                        q.pieces_hashed, q.pieces);
 
         return hash_string;
 }
