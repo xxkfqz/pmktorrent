@@ -221,7 +221,7 @@ EXPORT int file_tree_walk(const char *dirname, unsigned int nfds,
                                 }
                         }
 
-                        if (stat(path, &sbuf)) {
+                        if (lstat(path, &sbuf)) {
                                 fprintf(stderr, "Error stat'ing '%s': %s\n",
                                         path, strerror(errno));
                                 return cleanup(ds, path, -1);
