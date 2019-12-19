@@ -410,6 +410,7 @@ static void print_help()
                 "  -t, --threads=<n>             - use <n> threads for calculating hashes\n"
                 "                                  default is the number of CPU cores\n"
                 #endif /* USE_PTHREADS */
+                "  -V, --version                 - print the version number and exit\n"
                 "  -v, --verbose                 - be verbose\n"
                 "  -q, --quiet                   - be quiet (do not print anything)\n"
                 "  -w, --web-seed=<url>[,<url>]* - add web seed URLs\n"
@@ -432,11 +433,12 @@ static void print_help()
                 "  -s                - add source string embedded in infohash\n"
                 "  -b <name>         - set the name of the program that created the file aka\n"
                 "                      \"Created by\" field (optional)\n"
-                "                      default: \""PROGRAM " "VERSION"\"\n"
+                "                      default: \""PROGRAM " " VERSION"\"\n"
                 #ifdef USE_PTHREADS
                 "  -t <n>            - use <n> threads for calculating hashes\n"
                 "                      default is the number of CPU cores\n"
                 #endif /* USE_PTHREADS */
+                "  -V                - print the version number and exit"
                 "  -v                - be verbose\n"
                 "  -q                - be quiet (do not print anything)\n"
                 "  -w <url>[,<url>]* - add web seed URLs\n"
@@ -559,6 +561,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 #ifdef USE_PTHREADS
                 {"threads", 1, NULL, 't'},
 #endif
+                {"version", 0, NULL, 'V'},
                 {"verbose", 0, NULL, 'v'},
                 {"quite", 0, NULL, 'q'},
                 {"web-seed", 1, NULL, 'w'},
@@ -568,9 +571,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 
 /* now parse the command line options given */
 #ifdef USE_PTHREADS
-#define OPT_STRING "A:a:c:dfhl:n:o:ps:b::t:vqw:"
+#define OPT_STRING "A:a:c:dfhl:n:o:ps:b::t:Vvqw:"
 #else
-#define OPT_STRING "A:a:c:dfhl:n:o:ps:b::vqw:"
+#define OPT_STRING "A:a:c:dfhl:n:o:ps:b::Vvqw:"
 #endif
 #ifdef USE_LONG_OPTIONS
         while ((c = getopt_long(argc, argv, OPT_STRING,
@@ -674,6 +677,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                                 m->threads = atoi(optarg);
                                 break;
 #endif
+                        case 'V':
+                                printf("%s\n", PROGRAM " " VERSION);
+                                exit(EXIT_SUCCESS);
                         case 'v':
                                 m->verbose = 1;
                                 break;
