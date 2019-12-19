@@ -393,6 +393,7 @@ static void print_help()
                 "                                  is read\n"
                 "  -c, --comment=<comment>       - add a comment to the metainfo\n"
                 "  -d, --no-date                 - don't write the creation date\n"
+                "  -f, --force                   - overwrite the output file if it exists\n"
                 "  -h, --help                    - show this help screen\n"
                 "  -l, --piece-length=<n>        - set the piece length to 2^n bytes,\n"
                 "                                  default is 18, that is 2^18 = 256kb\n"
@@ -418,6 +419,7 @@ static void print_help()
                 "                      additional -a adds backup trackers\n"
                 "  -A <file>         - specify a file from which a full announce URL is read\n"
                 "  -c <comment>      - add a comment to the metainfo\n"
+                "  -f                - overwrite the output file if it exists\n"
                 "  -d                - don't write the creation date\n"
                 "  -h                - show this help screen\n"
                 "  -l <n>            - set the piece length to 2^n bytes,\n"
@@ -546,6 +548,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                 {"announce-file", 1, NULL, 'A'},
                 {"comment", 1, NULL, 'c'},
                 {"no-date", 0, NULL, 'd'},
+                {"force", 0, NULL, 'f'},
                 {"help", 0, NULL, 'h'},
                 {"piece-length", 1, NULL, 'l'},
                 {"name", 1, NULL, 'n'},
@@ -561,13 +564,13 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                 {"web-seed", 1, NULL, 'w'},
                 {NULL, 0, NULL, 0}
         };
-#endif
+#endif /* USE_LONG_OPTIONS */
 
 /* now parse the command line options given */
 #ifdef USE_PTHREADS
-#define OPT_STRING "A:a:c:dhl:n:o:ps:b::t:vqw:"
+#define OPT_STRING "A:a:c:dfhl:n:o:ps:b::t:vqw:"
 #else
-#define OPT_STRING "A:a:c:dhl:n:o:ps:b::vqw:"
+#define OPT_STRING "A:a:c:dfhl:n:o:ps:b::vqw:"
 #endif
 #ifdef USE_LONG_OPTIONS
         while ((c = getopt_long(argc, argv, OPT_STRING,
@@ -638,6 +641,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                                 break;
                         case 'c':
                                 m->comment = optarg;
+                                break;
+                        case 'f':
+                                m->force_output = 1;
                                 break;
                         case 'd':
                                 m->no_creation_date = 1;

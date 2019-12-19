@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.3] - Work in progress
 ### Added
 - Option for disabling any information output (`-q`)
+- Option for overwrite the output file if it exists (`-f`)
 
 ## [1.2] - 2019-12-08
 ### Added

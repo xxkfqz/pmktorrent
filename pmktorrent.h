@@ -53,6 +53,8 @@ typedef struct {
         /* flags */
         int verbose:1;             /* be verbose */
         int quiet:1;               /* be quiet */
+        int force_output:1;        /* overwrite output file if exists */
+
 #ifdef USE_PTHREADS
         unsigned int threads;      /* number of threads used for hashing */
 #endif

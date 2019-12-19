@@ -93,8 +93,9 @@ extern void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string);
  * create and open the metainfo file for writing and create a stream for it
  * we don't want to overwrite anything, so abort if the file is already there
  */
-static FILE *open_file(const char *path)
+static FILE *open_file(const char *path, int force_output)
 {
+        fprintf(stderr, "%d\n", force_output);
         if (strcmp ("-", path) == 0) {
                 /* just return stdout for --output=- */
                 return stdout;
@@ -103,9 +104,11 @@ static FILE *open_file(const char *path)
         int fd;  /* file descriptor */
         FILE *f; /* file stream */
 
-        /* open and create the file if it doesn't exist already */
-        fd = open(path, O_WRONLY | O_BINARY | O_CREAT | O_EXCL,
-                  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+        /* open and create the file */
+        fd = open(path,
+                O_WRONLY | O_BINARY | O_CREAT |
+                        (force_output ? O_TRUNC : O_EXCL),
+                S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
         if (fd < 0) {
                 fprintf(stderr, "Error creating '%s': %s\n",
                         path, strerror(errno));
@@ -164,9 +167,12 @@ int main(int argc, char *argv[])
                 /* flags */
                 0,    /* verbose */
                 0,    /* quiet */
+                0,    /* force_output */
+
 #ifdef USE_PTHREADS
                 0,    /* threads, initialised by init() */
 #endif
+
                 /* information calculated by read_dir() */
                 0,    /* size */
                 NULL, /* file_list */
@@ -179,7 +185,8 @@ int main(int argc, char *argv[])
 
         /* open the file stream now, so we don't have to abort
            _after_ we did all the hashing in case we fail */
-        file = open_file(m.metainfo_file_path);
+        fprintf(stderr, "%d\n", m.force_output);
+        file = open_file(m.metainfo_file_path, m.force_output);
 
         /* calculate hash string and write the metainfo to file */
         write_metainfo(file, &m, make_hash(&m));
