@@ -95,7 +95,6 @@ extern void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string);
  */
 static FILE *open_file(const char *path, int force_output)
 {
-        fprintf(stderr, "%d\n", force_output);
         if (strcmp ("-", path) == 0) {
                 /* just return stdout for --output=- */
                 return stdout;
@@ -185,7 +184,6 @@ int main(int argc, char *argv[])
 
         /* open the file stream now, so we don't have to abort
            _after_ we did all the hashing in case we fail */
-        fprintf(stderr, "%d\n", m.force_output);
         file = open_file(m.metainfo_file_path, m.force_output);
 
         /* calculate hash string and write the metainfo to file */
