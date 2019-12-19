@@ -48,6 +48,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
                            file_tree_walk() will open */
 #endif
 
+/* human readable string maximum size */
+#define HR_STR_SIZE 12
+
 static void strip_ending_dirseps(char *s)
 {
         char *end = s;
@@ -534,9 +537,42 @@ static void dump_options(metafile_t *m)
 }
 
 /*
- * parse and check the command line options given
- * and fill out the appropriate fields of the
- * metafile structure
+ * adopted for C variants:
+ * https://programming.guide/java/formatting-byte-size-to-human-readable-format.html
+ */
+static char *getSiSize(uint64_t b)
+{
+        char *s = calloc(HR_STR_SIZE, sizeof(char));
+
+        b < 1000 ? snprintf(s, HR_STR_SIZE, "%" PRIu64 " B", b)
+                : b < 999950 ? snprintf(s, HR_STR_SIZE, "%.1lf KB", (double)(b) / 1000)
+                : (b /= 1000) < 999950 ? snprintf(s, HR_STR_SIZE, "%.1lf MB", (double)(b) / 1000)
+                : (b /= 1000) < 999950 ? snprintf(s, HR_STR_SIZE, "%.1lf GB", (double)(b) / 1000)
+                : (b /= 1000) < 999950 ? snprintf(s, HR_STR_SIZE, "%.1lf TB", (double)(b) / 1000)
+                : (b /= 1000) < 999950 ? snprintf(s, HR_STR_SIZE, "%.1lf PB", (double)(b) / 1000)
+                : snprintf(s, HR_STR_SIZE, "%.1lf EB", (double)(b / 1e6));
+
+        return s;
+}
+
+static char *getBinarySize(uint64_t b)
+{
+        char *s = calloc(HR_STR_SIZE, sizeof(char));
+
+        b < 1024 ? snprintf(s, HR_STR_SIZE, "%" PRIu64 " B", b)
+                : b <= 0xfffcccccccccccc >> 40 ? snprintf(s, HR_STR_SIZE, "%.1lf KiB", (double)(b) / 0x1p10)
+                : b <= 0xfffcccccccccccc >> 30 ? snprintf(s, HR_STR_SIZE, "%.1lf MiB", (double)(b) / 0x1p20)
+                : b <= 0xfffcccccccccccc >> 20 ? snprintf(s, HR_STR_SIZE, "%.1lf GiB", (double)(b) / 0x1p30)
+                : b <= 0xfffcccccccccccc >> 10 ? snprintf(s, HR_STR_SIZE, "%.1lf TiB", (double)(b) / 0x1p40)
+                : b <= 0xfffcccccccccccc ? snprintf(s, HR_STR_SIZE, "%.1lf PiB", (b >> 10) / 0x1p40)
+                : snprintf(s, HR_STR_SIZE, "%.1lf EiB", (double)(b >> 20) / 0x1p40);
+
+        return s;
+}
+
+/*
+ * parse and check the command line options given and fill out the appropriate
+ * fields of the metafile structure
  */
 EXPORT void init(metafile_t *m, int argc, char *argv[])
 {
@@ -783,8 +819,16 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 
         /* now print the size and piece count if we should not be quiet */
         if (m->verbose)
-                fprintf(stderr,
-                        "\n%" PRIoff " bytes in all.\n"
-                                     "That's %u pieces of %u bytes each.\n\n",
-                m->size, m->pieces, m->piece_length);
+        {
+                char *SI_size = getSiSize(m->size);
+                char *binary_size = getBinarySize(m->size);
+
+                fprintf(stderr, "\n%" PRIoff " bytes (%s / %s) in all.\n"
+                        "That's %u pieces of %u bytes each.\n\n",
+                        m->size, SI_size, binary_size, m->pieces,
+                        m->piece_length);
+
+                free(SI_size);
+                free(binary_size);
+        }
 }

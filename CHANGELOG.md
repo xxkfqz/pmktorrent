@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Option for disabling any information output (`-q`)
 - Option for overwrite the output file if it exists (`-f`)
 - Option for print the version number (`-V`)
+- Human readable total size of processed files in output file information
 
 ## [1.2] - 2019-12-08
 ### Added
