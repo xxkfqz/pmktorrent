@@ -1,6 +1,6 @@
 # This file is part of pmktorrent
 # Copyright (C) 2007, 2009 Emil Renner Berthing
-# Edited 2019 xxkfqz <xxkfqz@gmail.com>
+# Edited 2019-2020 xxkfqz <xxkfqz@gmail.com>
 #
 # pmktorrent is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 include Makefile
 
 CC      ?= cc
-CFLAGS  ?= -O2 -Wall
+CFLAGS  ?= -O3 -march=native -Wall
 INSTALL ?= install
 PREFIX  ?= /usr/local
 

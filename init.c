@@ -1,7 +1,7 @@
 /*
 This file is part of pmktorrent
 Copyright (C) 2007, 2009 Emil Renner Berthing
-Edited 2019 xxkfqz <xxkfqz@gmail.com>
+Edited 2019-2020 xxkfqz <xxkfqz@gmail.com>
 
 pmktorrent is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <ctype.h>        /* isspace() */
 #include <stdbool.h>
 #include <inttypes.h>     /* PRId64 etc. */
+#include <time.h>         /* time(NULL) */
 #ifdef USE_LONG_OPTIONS
 #include <getopt.h>       /* getopt_long() */
 #endif
@@ -395,7 +396,8 @@ static void print_help()
                 "  -A, --announce-file=<file>    - specify a file from which a full announce URL\n"
                 "                                  is read\n"
                 "  -c, --comment=<comment>       - add a comment to the metainfo\n"
-                "  -d, --no-date                 - don't write the creation date\n"
+                "  -d, --date=[<timestamp>]      - specify the creation date\n"
+                "  -D, --no-date                 - don't write the creation date\n"
                 "  -f, --force                   - overwrite the output file if it exists\n"
                 "  -h, --help                    - show this help screen\n"
                 "  -l, --piece-length=<n>        - set the piece length to 2^n bytes,\n"
@@ -424,7 +426,8 @@ static void print_help()
                 "  -A <file>         - specify a file from which a full announce URL is read\n"
                 "  -c <comment>      - add a comment to the metainfo\n"
                 "  -f                - overwrite the output file if it exists\n"
-                "  -d                - don't write the creation date\n"
+                "  -d [<timestamp>]  - overwrite the creation date\n"
+                "  -D                - don't write the creation date\n"
                 "  -h                - show this help screen\n"
                 "  -l <n>            - set the piece length to 2^n bytes,\n"
                 "                      default is 18, that is 2^18 = 256kb\n"
@@ -448,7 +451,7 @@ static void print_help()
                 "                      additional -w adds more URLs\n"
                 #endif /* USE_LONG_OPTIONS */
                 "\nCopyright (C) 2007, 2009 Emil Renner Berthing\n"
-                "Edited 2019 xxkfqz <xxkfqz@gmail.com>\n\n"
+                "Edited 2019-2020 xxkfqz <xxkfqz@gmail.com>\n\n"
                 "Please send bug reports, patches, feature requests, praise and\n"
                 "general gossip about the program to: "
                 "https://github.com/xxkfqz/pmktorrent\n");
@@ -515,11 +518,19 @@ static void dump_options(metafile_t *m)
                 #endif
         );
 
-        fprintf(stderr, "  Write date:    ");
-        if (m->no_creation_date)
-                fprintf(stderr, "no\n");
+        /* Creation date block */
+        time_t t = m->creation_date;
+        struct tm *tm = localtime(&t);
+        char date_string[29];
+        strftime(date_string, sizeof(date_string), "%Y.%m.%d %H:%M:%S", tm);
+
+        fprintf(stderr, "  Creation date: ");
+        if(m->no_creation_date)
+                fprintf(stderr, "none\n");
         else
-                fprintf(stderr, "yes\n");
+                fprintf(stderr, "%s\n  Timestamp:     %ld\n", date_string,
+                        m->creation_date);
+        /* end */
 
         print_web_seed_list(m->web_seed_list);
 
@@ -579,13 +590,15 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
         int c;			/* return value of getopt() */
         llist_t *announce_last = NULL;
         slist_t *web_seed_last = NULL;
+        char *optargptr = NULL;
 #ifdef USE_LONG_OPTIONS
         /* the option structure to pass to getopt_long() */
         static struct option long_options[] = {
                 {"announce", 1, NULL, 'a'},
                 {"announce-file", 1, NULL, 'A'},
                 {"comment", 1, NULL, 'c'},
-                {"no-date", 0, NULL, 'd'},
+                {"no-date", 0, NULL, 'D'},
+                {"date", 1, NULL, 'd'},
                 {"force", 0, NULL, 'f'},
                 {"help", 0, NULL, 'h'},
                 {"piece-length", 1, NULL, 'l'},
@@ -607,9 +620,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 
 /* now parse the command line options given */
 #ifdef USE_PTHREADS
-#define OPT_STRING "A:a:c:dfhl:n:o:ps:b::t:Vvqw:"
+#define OPT_STRING "A:a:c:Dd:fhl:n:o:ps:b::t:Vvqw:"
 #else
-#define OPT_STRING "A:a:c:dfhl:n:o:ps:b::Vvqw:"
+#define OPT_STRING "A:a:c:Dd:fhl:n:o:ps:b::Vvqw:"
 #endif
 #ifdef USE_LONG_OPTIONS
         while ((c = getopt_long(argc, argv, OPT_STRING,
@@ -684,8 +697,24 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
                         case 'f':
                                 m->force_output = 1;
                                 break;
-                        case 'd':
+                        case 'D':
                                 m->no_creation_date = 1;
+                                break;
+                        case 'd':
+                                if(m->no_creation_date)
+                                        break;
+
+                                optargptr = optarg;
+                                while(isdigit(*optargptr)) optargptr++;
+                                if(optargptr > optarg)
+                                        m->creation_date = atol(optarg);
+                                else {
+                                        fprintf(stderr,
+                                                "Invalid timestamp: %s\n",
+                                                optarg);
+                                        exit(EXIT_FAILURE);
+                                }
+
                                 break;
                         case 'h':
                                 print_help();

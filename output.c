@@ -1,7 +1,7 @@
 /*
 This file is part of pmktorrent
 Copyright (C) 2007, 2009 Emil Renner Berthing
-Edited 2019 xxkfqz <xxkfqz@gmail.com>
+Edited 2019-2020 xxkfqz <xxkfqz@gmail.com>
 
 pmktorrent is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -159,10 +159,9 @@ EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
         /* I made this! */
         fprintf(f, "10:created by%lu:%s", (unsigned long)strlen(m->created_by),
                 m->created_by);
-        /* add the creation date */
+        /* add the creation date if specified */
         if (!m->no_creation_date)
-                fprintf(f, "13:creation datei%lde",
-                        (long)time(NULL));
+                fprintf(f, "13:creation datei%lde", m->creation_date);
 
         /* now here comes the info section
            it is yet another dictionary */

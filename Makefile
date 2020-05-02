@@ -1,6 +1,6 @@
 # This file is part of pmktorrent
 # Copyright (C) 2007, 2009 Emil Renner Berthing
-# Edited 2019 xxkfqz <xxkfqz@gmail.com>
+# Edited 2019-2020 xxkfqz <xxkfqz@gmail.com>
 #
 # pmktorrent is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 # Default settings shown
 #CC      = cc
-#CFLAGS  = -O2 -Wall
+#CFLAGS  = -O3 -march=native -Wall
 #LDFLAGS =
 #INSTALL = install
 #PREFIX  = /usr/local
@@ -64,7 +64,7 @@ MAX_OPENFD = 100
 #-------------Nothing interesting below this line-----------------------------
 
 program = pmktorrent
-version = 1.3
+version = 1.3git
 
 HEADERS  = pmktorrent.h
 SRCS     = ftw.c init.c sha1.c hash.c output.c main.c

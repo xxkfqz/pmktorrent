@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [?.?] - 2020-XX-XX
+### Added
+- Option to change creation date (`-d`)
+### Changed
+- "Disable creation date" option changed from `-d` to `-D`
+
 ## [1.3] - 2019-12-25
 ### Added
 - Option for disabling any information output (`-q`)

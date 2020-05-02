@@ -46,10 +46,11 @@ typedef struct {
         char *metainfo_file_path;  /* absolute path to the metainfo file */
         slist_t *web_seed_list;    /* web seed URLs */
         int target_is_directory;   /* target is a directory */
-        int no_creation_date;      /* don't write the creation date */
         int private;               /* set the private flag */
         char *source;              /* set source for private trackers */
         char *created_by;          /* "Created by" field */
+        long creation_date;        /* creation date in timestamp format */
+        int no_creation_date:1;    /* do not write creation date */
         /* flags */
         int verbose:1;             /* be verbose */
         int quiet:1;               /* be quiet */

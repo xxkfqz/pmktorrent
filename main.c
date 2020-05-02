@@ -1,7 +1,7 @@
 /*
 This file is part of pmktorrent
 Copyright (C) 2007, 2009 Emil Renner Berthing
-Edited 2019 xxkfqz <xxkfqz@gmail.com>
+Edited 2019-2020 xxkfqz <xxkfqz@gmail.com>
 
 pmktorrent is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <stdio.h>       /* printf() etc. */
 #include <sys/stat.h>    /* S_IRUSR, S_IWUSR, S_IRGRP, S_IROTH */
 #include <fcntl.h>       /* open() */
+#include <time.h>        /* time(NULL) */
 
 #ifdef ALLINONE
 #include <sys/stat.h>
@@ -151,32 +152,33 @@ int main(int argc, char *argv[])
         FILE *file;	/* stream for writing to the metainfo file */
         metafile_t m = {
                 /* options */
-                18,   /* piece_length, 2^18 = 256kb by default */
-                NULL, /* announce_from_file */
-                NULL, /* announce_list */
-                NULL, /* torrent_name */
-                NULL, /* metainfo_file_path */
-                NULL, /* web_seed_url */
-                NULL, /* comment */
-                0,    /* target_is_directory  */
-                0,    /* no_creation_date */
-                0,    /* private */
-                NULL, /* source string */
+                18,                  /* piece_length, 2^18 = 256kb by default */
+                NULL,                /* announce_from_file */
+                NULL,                /* announce_list */
+                NULL,                /* comment */
+                NULL,                /* torrent_name */
+                NULL,                /* metainfo_file_path */
+                NULL,                /* web_seed_url */
+                0,                   /* target_is_directory */
+                0,                   /* private */
+                NULL,                /* source string */
                 PROGRAM " " VERSION, /* created_by */
+                time(NULL),          /* creation date */
+                0,                   /* no creation date */
                 /* flags */
-                0,    /* verbose */
-                0,    /* quiet */
-                0,    /* force_output */
+                0,                   /* verbose */
+                0,                   /* quiet */
+                0,                   /* force_output */
 
 #ifdef USE_PTHREADS
-                0,    /* threads, initialised by init() */
+                0,                   /* threads, initialised by init() */
 #endif
 
                 /* information calculated by read_dir() */
-                0,    /* size */
-                NULL, /* file_list */
-                0,    /* file_count */
-                0     /* pieces */
+                0,                   /* size */
+                NULL,                /* file_list */
+                0,                   /* file_count */
+                0                    /* pieces */
         };
 
         /* process options */
