@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Option to change creation date (`-d`)
 ### Changed
 - "Disable creation date" option changed from `-d` to `-D`
+### Fixed
+- Metafile path when output file specified like `./output.torrent`
 
 ## [1.3] - 2019-12-25
 ### Added
