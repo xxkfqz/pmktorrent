@@ -33,6 +33,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <stdbool.h>
 #include <inttypes.h>     /* PRId64 etc. */
 #include <time.h>         /* time(NULL) */
+#include <limits.h>       /* PATH_MAX */
 #ifdef USE_LONG_OPTIONS
 #include <getopt.h>       /* getopt_long() */
 #endif
@@ -501,6 +502,7 @@ static void dump_options(metafile_t *m)
         if (m->announce_list != NULL)
                 print_announce_list(m->announce_list);
 
+        char path_buffer[PATH_MAX];
         fprintf(stderr,
                 "  Torrent name:  %s\n"
                 "  Metafile:      %s\n"
@@ -511,7 +513,7 @@ static void dump_options(metafile_t *m)
                 #endif
 
                 "  Be verbose:    yes\n",
-                m->torrent_name, realpath(m->metainfo_file_path, NULL),
+                m->torrent_name, realpath(m->metainfo_file_path, path_buffer),
                 m->piece_length
 
                 #ifdef USE_PTHREADS
