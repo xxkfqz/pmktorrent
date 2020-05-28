@@ -1,5 +1,5 @@
 # pmktorrent
-A simple command line utility to create BitTorrent metainfo files . It is a maintained fork of [mktorrent](https://github.com/Rudde/mktorrent)
+A simple command line utility to create BitTorrent metainfo files. It is a maintained fork of [mktorrent](https://github.com/Rudde/mktorrent)
 
 ## Features
 - Creates a BitTorrent metainfo file from a file (block devices are also
@@ -7,9 +7,17 @@ A simple command line utility to create BitTorrent metainfo files . It is a main
  and fast way
 - Supports multiple trackers
 - Can add a custom comment/creation date/created by to the metainfo file
-- Can add the private flag to dissalow DHT and Peer Exchange
+- Can add the private flag to disallow DHT and Peer Exchange
 - Can add web seed URLs
 - Hashing can be done multi threaded and supports multiple CPUs
+
+## How to use
+```shell
+# create torrent file from a directory
+pmktorrent ~/Music/ -o something_unreal.torrent
+# or a single file named by file or directory name
+pmktorrent ~/Pictures/cat.jpg
+```
 
 ## How to build
 ```shell script
@@ -39,5 +47,4 @@ If you use an old version of BSD's make, you might need:
 `make -f BSDmakefile`
 
 ## OpenSSL
-
 pmktorrent can optionally use the SHA1 algorithm in the OpenSSL library instead of compiling its own. Most systems have this library installed already, but on some systems (notably Ubuntu and other Debian derivatives) you’ll also need the development package in order to build the program. Usually it will be called something like `openssl-dev` or `libssl-dev`. For this you need to specify the `USE_OPENSSL=1` option

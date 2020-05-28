@@ -790,7 +790,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
 
         /* ..and a file or directory from which to create the torrent */
         if (optind >= argc) {
-                fprintf(stderr, "Missing operand. Try '-h' or --help', "
+                fprintf(stderr, "Missing operand. Try '-h' or '--help', "
                                 "for more information\n");
                 exit(EXIT_FAILURE);
         }
