@@ -619,11 +619,6 @@ static char *getBinarySize(uint64_t b)
     return s;
 }
 
-static unsigned long calculate_piece_length(void)
-{
-    return 1337;
-}
-
 /*
  * parse and check the command line options given and fill out the appropriate
  * fields of the metafile structure
@@ -840,13 +835,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
         m->created_by = PROGRAM " " VERSION;
 
     /* set the correct piece length. default is 2^18 = 256kb. */
-    if (m->piece_length == 0)
-    {
-        m->piece_length = calculate_piece_length();
-        fprintf(stderr, "%d\n", m->piece_length);
-        exit(EXIT_SUCCESS);
-    }
-    else if (m->piece_length < 15 || m->piece_length > 28)
+    if (m->piece_length < 15 || m->piece_length > 28)
     {
         fprintf(stderr,
                 "The piece length must be a number between "
