@@ -46,20 +46,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 static void write_announce_list(FILE *f, llist_t *list)
 {
-        /* the announce list is a list of lists of urls */
-        fprintf(f, "13:announce-listl");
-        /* go through them all.. */
-        for (; list; list = list->next) {
-                slist_t *l;
+    /* the announce list is a list of lists of urls */
+    fprintf(f, "13:announce-listl");
+    /* go through them all.. */
+    for (; list; list = list->next)
+    {
+        slist_t *l;
 
-                /* .. and print the lists */
-                fprintf(f, "l");
-                for (l = list->l; l; l = l->next)
-                        fprintf(f, "%lu:%s",
-                                (unsigned long)strlen(l->s), l->s);
-                fprintf(f, "e");
-        }
+        /* .. and print the lists */
+        fprintf(f, "l");
+        for (l = list->l; l; l = l->next)
+            fprintf(f, "%lu:%s",
+                    (unsigned long)strlen(l->s), l->s);
         fprintf(f, "e");
+    }
+    fprintf(f, "e");
 }
 
 /*
@@ -67,40 +68,42 @@ static void write_announce_list(FILE *f, llist_t *list)
  */
 static void write_file_list(FILE *f, flist_t *list)
 {
-        char *a, *b;
+    char *a, *b;
 
-        fprintf(f, "5:filesl");
+    fprintf(f, "5:filesl");
 
-        /* go through all the files */
-        for (; list; list = list->next) {
-                /* the file list contains a dictionary for every file
-                   with entries for the length and path
-                   write the length first */
-                fprintf(f, "d6:lengthi%" PRIoff "e4:pathl", list->size);
-                /* the file path is written as a list of subdirectories
-                   and the last entry is the filename
-                   sorry this code is even uglier than the rest */
-                a = list->path;
-                /* while there are subdirectories before the filename.. */
-                while ((b = strchr(a, DIRSEP_CHAR)) != NULL) {
-                        /* set the next DIRSEP_CHAR to '\0' so fprintf
-                           will only write the first subdirectory name */
-                        *b = '\0';
-                        /* print it bencoded */
-                        fprintf(f, "%lu:%s", (unsigned long)strlen(a), a);
-                        /* undo our alteration to the string */
-                        *b = DIRSEP_CHAR;
-                        /* and move a to the beginning of the next
-                           subdir or filename */
-                        a = b + 1;
-                }
-                /* now print the filename bencoded and end the
-                   path name list and file dictionary */
-                fprintf(f, "%lu:%see", (unsigned long)strlen(a), a);
+    /* go through all the files */
+    for (; list; list = list->next)
+    {
+        /* the file list contains a dictionary for every file
+           with entries for the length and path
+           write the length first */
+        fprintf(f, "d6:lengthi%" PRIoff "e4:pathl", list->size);
+        /* the file path is written as a list of subdirectories
+           and the last entry is the filename
+           sorry this code is even uglier than the rest */
+        a = list->path;
+        /* while there are subdirectories before the filename.. */
+        while ((b = strchr(a, DIRSEP_CHAR)) != NULL)
+        {
+            /* set the next DIRSEP_CHAR to '\0' so fprintf
+               will only write the first subdirectory name */
+            *b = '\0';
+            /* print it bencoded */
+            fprintf(f, "%lu:%s", (unsigned long)strlen(a), a);
+            /* undo our alteration to the string */
+            *b = DIRSEP_CHAR;
+            /* and move a to the beginning of the next
+               subdir or filename */
+            a = b + 1;
         }
+        /* now print the filename bencoded and end the
+           path name list and file dictionary */
+        fprintf(f, "%lu:%see", (unsigned long)strlen(a), a);
+    }
 
-        /* whew, now end the file list */
-        fprintf(f, "e");
+    /* whew, now end the file list */
+    fprintf(f, "e");
 }
 
 /*
@@ -108,13 +111,13 @@ static void write_file_list(FILE *f, flist_t *list)
  */
 static void write_web_seed_list(FILE *f, slist_t *list)
 {
-        /* print the entry and start the list */
-        fprintf(f, "8:url-listl");
-        /* go through the list and write each URL */
-        for (; list; list = list->next)
-                fprintf(f, "%lu:%s", (unsigned long)strlen(list->s), list->s);
-        /* end the list */
-        fprintf(f, "e");
+    /* print the entry and start the list */
+    fprintf(f, "8:url-listl");
+    /* go through the list and write each URL */
+    for (; list; list = list->next)
+        fprintf(f, "%lu:%s", (unsigned long)strlen(list->s), list->s);
+    /* end the list */
+    fprintf(f, "e");
 }
 
 /*
@@ -123,90 +126,92 @@ static void write_web_seed_list(FILE *f, slist_t *list)
  */
 EXPORT void write_metainfo(FILE *f, metafile_t *m, unsigned char *hash_string)
 {
-        if (!m->quiet)
-        {
-                fprintf(stderr, "Total number of files: %" PRIu64 "\n",
-                        m->file_count);
-                if(m->file_count >= FILES_NUMBER_WARNING)
-                        fprintf(stderr,
-                                "Warning: the current number of files can cause"
-                                "problems on torrent clients");
+    if (!m->quiet)
+    {
+        fprintf(stderr, "Total number of files: %" PRIu64 "\n",
+                m->file_count);
+        if(m->file_count >= FILES_NUMBER_WARNING)
+            fprintf(stderr,
+                    "Warning: the current number of files can cause"
+                    "problems on torrent clients");
 
-                /* let the user know we've started writing the metainfo file */
-                fprintf(stderr, "Writing metainfo file... ");
-        }
-        fflush(stdout);
+        /* let the user know we've started writing the metainfo file */
+        fprintf(stderr, "Writing metainfo file... ");
+    }
+    fflush(stdout);
 
-        /* every metainfo file is one big dictonary */
-        fprintf(f, "d");
+    /* every metainfo file is one big dictonary */
+    fprintf(f, "d");
 
-        if (m->announce_list != NULL) {
-                /* write the announce URL */
-                fprintf(f, "8:announce%lu:%s",
-                        (unsigned long)strlen(m->announce_list->l->s),
-                        m->announce_list->l->s);
-                /* write the announce-list entry if we have
-                   more than one announce URL */
-                if (m->announce_list->next || m->announce_list->l->next)
-                        write_announce_list(f, m->announce_list);
-        }
+    if (m->announce_list != NULL)
+    {
+        /* write the announce URL */
+        fprintf(f, "8:announce%lu:%s",
+                (unsigned long)strlen(m->announce_list->l->s),
+                m->announce_list->l->s);
+        /* write the announce-list entry if we have
+           more than one announce URL */
+        if (m->announce_list->next || m->announce_list->l->next)
+            write_announce_list(f, m->announce_list);
+    }
 
-        /* add the comment if one is specified */
-        if (m->comment != NULL)
-                fprintf(f, "7:comment%lu:%s",
-                        (unsigned long)strlen(m->comment),
-                        m->comment);
-        /* I made this! */
-        fprintf(f, "10:created by%lu:%s", (unsigned long)strlen(m->created_by),
-                m->created_by);
-        /* add the creation date if specified */
-        if (!m->no_creation_date)
-                fprintf(f, "13:creation datei%lde", m->creation_date);
+    /* add the comment if one is specified */
+    if (m->comment != NULL)
+        fprintf(f, "7:comment%lu:%s",
+                (unsigned long)strlen(m->comment),
+                m->comment);
+    /* I made this! */
+    fprintf(f, "10:created by%lu:%s", (unsigned long)strlen(m->created_by),
+            m->created_by);
+    /* add the creation date if specified */
+    if (!m->no_creation_date)
+        fprintf(f, "13:creation datei%lde", m->creation_date);
 
-        /* now here comes the info section
-           it is yet another dictionary */
-        fprintf(f, "4:infod");
-        /* first entry is either 'length', which specifies the length of a
-           single file torrent, or a list of files and their respective sizes */
-        if (!m->target_is_directory)
-                fprintf(f, "6:lengthi%" PRIoff "e", m->file_list->size);
-        else
+    /* now here comes the info section
+       it is yet another dictionary */
+    fprintf(f, "4:infod");
+    /* first entry is either 'length', which specifies the length of a
+       single file torrent, or a list of files and their respective sizes */
+    if (!m->target_is_directory)
+        fprintf(f, "6:lengthi%" PRIoff "e", m->file_list->size);
+    else
         write_file_list(f, m->file_list);
 
-        /* the info section also contains the name of the torrent,
-           the piece length and the hash string */
-        fprintf(f, "4:name%lu:%s12:piece lengthi%ue6:pieces%u:",
-                (unsigned long)strlen(m->torrent_name), m->torrent_name,
-                m->piece_length, m->pieces * SHA_DIGEST_LENGTH);
-        fwrite(hash_string, 1, m->pieces * SHA_DIGEST_LENGTH, f);
+    /* the info section also contains the name of the torrent,
+       the piece length and the hash string */
+    fprintf(f, "4:name%lu:%s12:piece lengthi%ue6:pieces%u:",
+            (unsigned long)strlen(m->torrent_name), m->torrent_name,
+            m->piece_length, m->pieces * SHA_DIGEST_LENGTH);
+    fwrite(hash_string, 1, m->pieces * SHA_DIGEST_LENGTH, f);
 
-        /* set the private flag */
-        if (m->private)
-                fprintf(f, "7:privatei1e");
+    /* set the private flag */
+    if (m->private)
+        fprintf(f, "7:privatei1e");
 
-        if (m->source)
-                fprintf(f, "6:source%lu:%s", (unsigned long)strlen(m->source),
-                        m->source);
+    if (m->source)
+        fprintf(f, "6:source%lu:%s", (unsigned long)strlen(m->source),
+                m->source);
 
-        /* end the info section */
-        fprintf(f, "e");
+    /* end the info section */
+    fprintf(f, "e");
 
-        /* add url-list if one is specified */
-        if (m->web_seed_list != NULL) {
-                if (m->web_seed_list->next == NULL)
-                        fprintf(f, "8:url-list%lu:%s",
-                                (unsigned long)strlen(m->web_seed_list->s),
-                                m->web_seed_list->s);
-                else
-                        write_web_seed_list(f, m->web_seed_list);
-        }
+    /* add url-list if one is specified */
+    if (m->web_seed_list != NULL)
+    {
+        if (m->web_seed_list->next == NULL)
+            fprintf(f, "8:url-list%lu:%s",
+                    (unsigned long)strlen(m->web_seed_list->s),
+                    m->web_seed_list->s);
+        else
+            write_web_seed_list(f, m->web_seed_list);
+    }
 
-        /* end the root dictionary */
-        fprintf(f, "e");
+    /* end the root dictionary */
+    fprintf(f, "e");
 
-        /* let the user know we're done already */
-        if (!m->quiet)
-                fprintf(stderr, "done.\n");
-        fflush(stdout);
-        free(hash_string);
+    /* let the user know we're done already */
+    if (!m->quiet)
+        fprintf(stderr, "done.\n");
+    fflush(stdout);
+    free(hash_string);
 }
