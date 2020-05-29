@@ -4,7 +4,8 @@
 #ifndef __SHA1_H
 #define __SHA1_H
 
-typedef struct {
+typedef struct
+{
     uint32_t state[5];
     uint32_t count[2];
     uint8_t  buffer[64];
