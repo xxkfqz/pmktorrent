@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     metafile_t m =
     {
         /* options */
-        18,                  /* piece_length, 2^18 = 256kb by default */
+        0,                   /* piece_length, auto by default */
         NULL,                /* announce_from_file */
         NULL,                /* announce_list */
         NULL,                /* comment */

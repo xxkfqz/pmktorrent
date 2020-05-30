@@ -1,5 +1,5 @@
-#ifndef _FTW_H
-#define _FTW_H
+#ifndef _FILEWALK_H
+#define _FILEWALK_H
 
 typedef int (*file_tree_walk_cb)(const char *name,
                                  const struct stat *sbuf, void *data);
@@ -10,4 +10,4 @@ int file_tree_walk(const char *dirname, unsigned int nfds,
 
 #endif /* ALLINONE */
 
-#endif /* _FTW_H */
+#endif /* _FILEWALK_H */

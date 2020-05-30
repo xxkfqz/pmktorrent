@@ -34,12 +34,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #include <inttypes.h>     /* PRId64 etc. */
 #include <time.h>         /* time(NULL) */
 #include <limits.h>       /* PATH_MAX */
+#include <math.h>         /* fmax(), fmin(), log() etc. */
+#include <ftw.h>          /* ftw() */
 #ifdef USE_LONG_OPTIONS
 #include <getopt.h>       /* getopt_long() */
 #endif
 
 #include "pmktorrent.h"
-#include "ftw.h"
+#include "filewalk.h"
 
 #define EXPORT
 #endif /* ALLINONE */
@@ -52,6 +54,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 /* human readable string maximum size */
 #define HR_STR_SIZE 12
+
+unsigned long long ftw_total_size = 0;
 
 static void strip_ending_dirseps(char *s)
 {
@@ -115,8 +119,11 @@ static const char *basename(const char *s)
 
 static void set_absolute_file_path(metafile_t *m)
 {
-    char *string;           /* string to return */
-    size_t length = 32;     /* length of the string */
+    /* string to return */
+    char *string;
+
+    /* length of the string */
+    size_t length = 32;
 
     /* if the file_path is already an absolute path just
        return that */
@@ -161,8 +168,7 @@ static void set_absolute_file_path(metafile_t *m)
     if (m->metainfo_file_path == NULL)
     {
         /* append <torrent name>.torrent to the working dir */
-        string =
-            realloc(string, length + strlen(m->torrent_name) + 10);
+        string = realloc(string, length + strlen(m->torrent_name) + 10);
         if (string == NULL)
         {
             fprintf(stderr, "Out of memory.\n");
@@ -173,9 +179,7 @@ static void set_absolute_file_path(metafile_t *m)
     else
     {
         /* otherwise append the torrent path to the working dir */
-        string =
-            realloc(string,
-                    length + strlen(m->metainfo_file_path) + 2);
+        string = realloc(string, length + strlen(m->metainfo_file_path) + 2);
         if (string == NULL)
         {
             fprintf(stderr, "Out of memory.\n");
@@ -183,7 +187,6 @@ static void set_absolute_file_path(metafile_t *m)
         }
         sprintf(string + length, DIRSEP "%s", m->metainfo_file_path);
     }
-
     m->metainfo_file_path = string;
 }
 
@@ -434,8 +437,8 @@ static void print_help()
         "  -D, --no-date                 - don't write the creation date\n"
         "  -f, --force                   - overwrite the output file if it exists\n"
         "  -h, --help                    - show this help screen\n"
-        "  -l, --piece-length=<n>        - set the piece length to 2^n bytes,\n"
-        "                                  default is 18, that is 2^18 = 256kb\n"
+        "  -l, --piece-length=<n>|auto   - set the piece length to 2^n bytes,\n"
+        "                                  default is 'auto'\n"
         "  -n, --name=<name>             - set the name of the torrent\n"
         "                                  default is the basename of the target\n"
         "  -o, --output=<filename>       - set the path and filename of the created file\n"
@@ -463,8 +466,8 @@ static void print_help()
         "  -d [<timestamp>]  - overwrite the creation date\n"
         "  -D                - don't write the creation date\n"
         "  -h                - show this help screen\n"
-        "  -l <n>            - set the piece length to 2^n bytes,\n"
-        "                      default is 18, that is 2^18 = 256kb\n"
+        "  -l <n>|auto       - set the piece length to 2^n bytes,\n"
+        "                      default is 'auto'\n"
         "  -n <name>         - set the name of the torrent,\n"
         "                      default is the basename of the target\n"
         "  -o <filename>     - set the path and filename of the created file\n"
@@ -617,6 +620,24 @@ static char *getBinarySize(uint64_t b)
                              : snprintf(s, HR_STR_SIZE, "%.1lf EiB", (double)(b >> 20) / 0x1p40);
 
     return s;
+}
+
+static int calculate_size(const char *fpath, const struct stat *sb, int typeflag)
+{
+    ftw_total_size += sb->st_size;
+    return 0;
+}
+
+static int calculate_piece_length(const char *path)
+{
+    if(ftw(path, &calculate_size, MAX_OPENFD))
+    {
+        fprintf(stderr, "Cannot calculate size '%s'\n", path);
+        exit(EXIT_FAILURE);
+    }
+
+    /* https://github.com/Rudde/mktorrent/issues/30#issue-400978650 */
+    return fmax( 15, fmin( 24, floor( log( ftw_total_size / 1000 ) / log( 2 ))));
 }
 
 /*
@@ -777,7 +798,7 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
             print_help();
             exit(EXIT_SUCCESS);
         case 'l':
-            m->piece_length = strcmp(optarg, "auto") ? 0 : atoi(optarg);
+            m->piece_length = strcmp(optarg, "auto") ? atoi(optarg) : 0;
             break;
         case 'n':
             m->torrent_name = optarg;
@@ -835,7 +856,9 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
         m->created_by = PROGRAM " " VERSION;
 
     /* set the correct piece length. default is 2^18 = 256kb. */
-    if (m->piece_length < 15 || m->piece_length > 28)
+    if (m->piece_length == 0)
+        m->piece_length = calculate_piece_length(argv[optind]);
+    else if (m->piece_length < 15 || m->piece_length > 28)
     {
         fprintf(stderr,
                 "The piece length must be a number between "

@@ -67,4 +67,4 @@ program = pmktorrent
 version = 1.3git
 
 HEADERS  = pmktorrent.h
-SRCS     = ftw.c init.c sha1.c hash.c output.c main.c
+SRCS     = filewalk.c init.c sha1.c hash.c output.c main.c

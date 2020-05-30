@@ -20,6 +20,7 @@ include Makefile
 
 CC      ?= cc
 CFLAGS  ?= -O3 -march=native -Wall
+LDFLAGS ?= -lm
 INSTALL ?= install
 PREFIX  ?= /usr/local
 
@@ -62,6 +63,6 @@ OBJS = $(SRCS:.c=.o)
 all: $(program)
 
 %.o: %.c $(HEADERS) prefix
-	$(CC) $(CFLAGS) $(DEFINES) -DPRIoff="\"$(OFFPRFX)d\"" -DPROGRAM="\"$(program)\"" -DVERSION="\"$(version)\"" -c $<
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFINES) -DPRIoff="\"$(OFFPRFX)d\"" -DPROGRAM="\"$(program)\"" -DVERSION="\"$(version)\"" -c $<
 
 include rules.mk

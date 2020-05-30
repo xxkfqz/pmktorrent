@@ -36,7 +36,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 #define EXPORT
 #endif /* ALLINONE */
 
-#include "ftw.h"
+#include "filewalk.h"
 
 struct dir_state
 {
@@ -303,3 +303,4 @@ EXPORT int file_tree_walk(const char *dirname, unsigned int nfds,
 
     return cleanup(ds, path, 0);
 }
+

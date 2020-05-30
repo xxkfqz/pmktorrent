@@ -20,6 +20,7 @@
 
 CC      ?= cc
 CFLAGS  ?= -O3 -march=native -Wall
+LDFLAGS ?= -lm
 INSTALL ?= install
 PREFIX  ?= /usr/local
 
@@ -61,7 +62,7 @@ all: $(program)
 
 .SUFFIXES: .o .c
 .c.o:
-	$(CC) $(CFLAGS) $(DEFINES) -DPRIoff="\"`./prefix`d\"" -DPROGRAM="\"$(program)\"" -DVERSION="\"$(version)\"" -c $(.IMPSRC)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(DEFINES) -DPRIoff="\"`./prefix`d\"" -DPROGRAM="\"$(program)\"" -DVERSION="\"$(version)\"" -c $(.IMPSRC)
 
 $(OBJS): $(HEADERS) prefix
 

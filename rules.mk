@@ -16,7 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-.PHONY: strip indent clean install uninstall
+.PHONY: strip astyle clean install uninstall
 
 prefix: prefix.c
 	$(CC) $(CFLAGS) $(DEFINES) $(LDFLAGS) $< -o $@
@@ -28,15 +28,15 @@ allinone: $(SRCS) $(HEADERS) prefix
 	$(CC) $(CFLAGS) $(DEFINES) -DPRIoff="\"`./prefix`d\"" -DVERSION="\"$(version)\"" -DALLINONE main.c -o $(program) $(LDFLAGS) $(LIBS)
 
 strip:
-	strip $(program)
+	strip -s $(program)
 
-indent:
-	indent -kr -i8 *.c *.h
+astyle:
+	astyle --style=bsd --indent=spaces=4 *.c *.h
 
 clean:
 	rm -f $(program) prefix *.o *.c~ *.h~
 
-install: $(program)
+install: $(program) strip
 	$(INSTALL) -d $(DESTDIR)$(PREFIX)/bin
 	$(INSTALL) -m755 $(program) $(DESTDIR)$(PREFIX)/bin/$(program)
 
