@@ -551,8 +551,7 @@ static void dump_options(metafile_t *m)
 #endif
 
             "  Be verbose:    yes\n",
-            m->torrent_name, realpath(m->metainfo_file_path, path_buffer),
-            m->piece_length
+            m->torrent_name, m->metainfo_file_path, m->piece_length
 
 #ifdef USE_PTHREADS
             ,m->threads
