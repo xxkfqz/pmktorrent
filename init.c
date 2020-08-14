@@ -540,7 +540,6 @@ static void dump_options(metafile_t *m)
     if (m->announce_list != NULL)
         print_announce_list(m->announce_list);
 
-    char path_buffer[PATH_MAX];
     fprintf(stderr,
             "  Torrent name:  %s\n"
             "  Metafile:      %s\n"
@@ -645,6 +644,12 @@ static int calculate_piece_length(const char *path)
  */
 EXPORT void init(metafile_t *m, int argc, char *argv[])
 {
+	if(argc <= 1)
+	{
+		print_help();
+		exit(EXIT_SUCCESS);
+	}
+	
     /* return value of getopt() */
     int c;
 
@@ -845,8 +850,8 @@ EXPORT void init(metafile_t *m, int argc, char *argv[])
             break;
         case '?':
         default:
-            fprintf(stderr, "Use -h for help.\n");
-            exit(EXIT_FAILURE);
+            print_help();
+            exit(EXIT_SUCCESS);
             break;
         }
     }

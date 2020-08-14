@@ -64,7 +64,7 @@ MAX_OPENFD = 100
 #-------------Nothing interesting below this line-----------------------------
 
 program = pmktorrent
-version = 1.3git
+version = 1.3.1
 
 HEADERS  = pmktorrent.h
 SRCS     = filewalk.c init.c sha1.c hash.c output.c main.c

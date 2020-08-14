@@ -4,13 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [?.?] - 2020-XX-XX
+## [1.3.1] - 2020-08-14
 ### Added
 - Option to change creation date (`-d`)
+- Added `auto` in piece length option
 ### Changed
 - "Disable creation date" option changed from `-d` to `-D`
 ### Fixed
-- Metafile path when output file specified like `./output.torrent`
+- Metafile path when output file specified like `./output.torrent` (issue
+  [#1](https://github.com/xxkfqz/pmktorrent/issues/1))
+- '(null)' in 'Metafile:'
+- SIGSEGV when no arguments specified
 
 ## [1.3] - 2019-12-25
 ### Added
