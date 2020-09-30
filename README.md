@@ -1,5 +1,7 @@
 # pmktorrent
-A simple command line utility to create BitTorrent metainfo files. It is a maintained fork of [mktorrent](https://github.com/Rudde/mktorrent)
+A simple command line utility to create BitTorrent metainfo files. [mktorrent](https://github.com/Rudde/mktorrent) with some patches.
+
+pmktorrent is no longer being developed. use [mktorrent](https://github.com/Rudde/mktorrent) instead
 
 ## Features
 - Creates a BitTorrent metainfo file from a file (block devices are also
